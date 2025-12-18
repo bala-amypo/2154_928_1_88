@@ -1,12 +1,8 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class ApartmentUnit {
 
     @Id
@@ -15,4 +11,15 @@ public class ApartmentUnit {
 
     private String unitNumber;
     private int floor;
+
+    @ManyToOne
+    private User user;
+
+    public Long getId() { return id; }
+    public String getUnitNumber() { return unitNumber; }
+    public void setUnitNumber(String unitNumber) { this.unitNumber = unitNumber; }
+    public int getFloor() { return floor; }
+    public void setFloor(int floor) { this.floor = floor; }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 }

@@ -12,8 +12,16 @@ public class Booking {
     private String bookingDate;
 
     @ManyToOne
-    private User user;
+    private Facility facility;
 
     @ManyToOne
-    private Facility facility;
+    private User user;
+
+    public Long getId() { return id; }
+    public String getBookingDate() { return bookingDate; }
+    public void setBookingDate(String bookingDate) { this.bookingDate = bookingDate; }
+    public Facility getFacility() { return facility; }
+    public void setFacility(Facility facility) { this.facility = facility; }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 }
