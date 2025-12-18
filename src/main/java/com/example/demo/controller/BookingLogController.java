@@ -1,10 +1,7 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.List;
 import com.example.demo.entity.BookingLog;
 import com.example.demo.service.BookingLogService;
 
@@ -12,11 +9,14 @@ import com.example.demo.service.BookingLogService;
 @RequestMapping("/logs")
 public class BookingLogController {
 
-    @Autowired
-    private BookingLogService bookingLogService;
+    private final BookingLogService service;
+
+    public BookingLogController(BookingLogService service) {
+        this.service = service;
+    }
 
     @GetMapping("/booking/{bookingId}")
-    public List<BookingLog> getLogsByBooking(@PathVariable Long bookingId) {
-        return bookingLogService.getLogsByBookingId(bookingId);
+    public List<BookingLog> getLogs(@PathVariable Long bookingId) {
+        return service.findByBookingId(bookingId);
     }
 }

@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.List;
 import com.example.demo.entity.ApartmentUnit;
 import com.example.demo.service.ApartmentUnitService;
 
@@ -10,16 +9,19 @@ import com.example.demo.service.ApartmentUnitService;
 @RequestMapping("/units")
 public class ApartmentUnitController {
 
-    @Autowired
-    private ApartmentUnitService unitService;
+    private final ApartmentUnitService service;
 
-    @PostMapping("/assign/{userId}")
-    public ApartmentUnit assignUnit(@PathVariable Long userId) {
-        return unitService.assignUnit(userId);
+    public ApartmentUnitController(ApartmentUnitService service) {
+        this.service = service;
     }
 
-    @GetMapping("/user/{userId}")
-    public ApartmentUnit getUnitByUser(@PathVariable Long userId) {
-        return unitService.getUnitByUserId(userId);
+    @PostMapping
+    public ApartmentUnit create(@RequestBody ApartmentUnit unit) {
+        return service.save(unit);
+    }
+
+    @GetMapping
+    public List<ApartmentUnit> getAll() {
+        return service.findAll();
     }
 }
