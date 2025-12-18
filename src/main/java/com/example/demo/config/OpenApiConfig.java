@@ -13,17 +13,15 @@ public class OpenApiConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-
-        // 👇 PASTE YOUR URL HERE
-        Server server = new Server();
-        server.setUrl("https://9110.pro604cr.amypo.ai");
-        server.setDescription("Production Server");
-
         return new OpenAPI()
                 .info(new Info()
                         .title("Demo Application API")
-                        .version("1.0")
-                        .description("Swagger documentation for Users and Vehicles APIs"))
-                .servers(List.of(server));
+                        .description("Apartment, Facility, Booking Management APIs")
+                        .version("1.0.0"))
+                .servers(List.of(
+                        new Server()
+                                .url("https://9110.pro604cr.amypo.ai")
+                                .description("Production Server")
+                ));
     }
 }
