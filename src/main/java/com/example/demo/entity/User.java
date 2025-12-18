@@ -1,12 +1,9 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "user")
 public class User {
 
     @Id
@@ -17,4 +14,6 @@ public class User {
     private String email;
     private String password;
     private String role;
+
+    // getters & setters
 }
