@@ -1,27 +1,32 @@
 package com.example.demo.controller;
 
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.model.Booking;
+
+import com.example.demo.entity.Booking;
 import com.example.demo.service.BookingService;
 
 @RestController
 @RequestMapping("/bookings")
 public class BookingController {
 
-    private final BookingService service;
+    @Autowired
+    private BookingService bookingService;
 
-    public BookingController(BookingService service) {
-        this.service = service;
+    @PostMapping("/{facilityId}/{userId}")
+    public Booking createBooking(
+            @PathVariable Long facilityId,
+            @PathVariable Long userId) {
+        return bookingService.bookFacility(facilityId, userId);
     }
 
-    @PostMapping
-    public Booking save(@RequestBody Booking booking) {
-        return service.saveBooking(booking);
+    @PutMapping("/cancel/{bookingId}")
+    public Booking cancelBooking(@PathVariable Long bookingId) {
+        return bookingService.cancelBooking(bookingId);
     }
 
-    @GetMapping
-    public List<Booking> getAll() {
-        return service.getAllBookings();
+    @GetMapping("/{bookingId}")
+    public Booking getBooking(@PathVariable Long bookingId) {
+        return bookingService.getBookingById(bookingId);
     }
 }

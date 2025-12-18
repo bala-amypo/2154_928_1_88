@@ -1,27 +1,27 @@
 package com.example.demo.controller;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.model.Facility;
+
+import com.example.demo.entity.Facility;
 import com.example.demo.service.FacilityService;
 
 @RestController
 @RequestMapping("/facilities")
 public class FacilityController {
 
-    private final FacilityService service;
-
-    public FacilityController(FacilityService service) {
-        this.service = service;
-    }
+    @Autowired
+    private FacilityService facilityService;
 
     @PostMapping
-    public Facility save(@RequestBody Facility facility) {
-        return service.saveFacility(facility);
+    public Facility createFacility(@RequestBody Facility facility) {
+        return facilityService.saveFacility(facility);
     }
 
     @GetMapping
-    public List<Facility> getAll() {
-        return service.getAllFacilities();
+    public List<Facility> getAllFacilities() {
+        return facilityService.getAllFacilities();
     }
 }
