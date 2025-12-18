@@ -1,10 +1,9 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
 import org.springframework.stereotype.Service;
-import com.example.demo.model.Booking;
-import com.example.demo.repository.BookingRepository;
 import com.example.demo.service.BookingService;
+import com.example.demo.entity.Booking;
+import com.example.demo.repository.BookingRepository;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -15,11 +14,11 @@ public class BookingServiceImpl implements BookingService {
         this.repo = repo;
     }
 
-    public Booking saveBooking(Booking booking) {
+    public Booking save(Booking booking) {
         return repo.save(booking);
     }
 
-    public List<Booking> getAllBookings() {
-        return repo.findAll();
+    public Booking getById(Long id) {
+        return repo.findById(id).orElse(null);
     }
 }

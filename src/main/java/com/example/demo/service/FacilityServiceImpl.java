@@ -1,10 +1,10 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
 import org.springframework.stereotype.Service;
-import com.example.demo.model.Facility;
-import com.example.demo.repository.FacilityRepository;
+import java.util.List;
 import com.example.demo.service.FacilityService;
+import com.example.demo.entity.Facility;
+import com.example.demo.repository.FacilityRepository;
 
 @Service
 public class FacilityServiceImpl implements FacilityService {
@@ -15,11 +15,11 @@ public class FacilityServiceImpl implements FacilityService {
         this.repo = repo;
     }
 
-    public Facility saveFacility(Facility facility) {
+    public Facility save(Facility facility) {
         return repo.save(facility);
     }
 
-    public List<Facility> getAllFacilities() {
+    public List<Facility> findAll() {
         return repo.findAll();
     }
 }

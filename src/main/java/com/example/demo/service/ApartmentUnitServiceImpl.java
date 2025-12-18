@@ -1,10 +1,10 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
 import org.springframework.stereotype.Service;
-import com.example.demo.model.ApartmentUnit;
-import com.example.demo.repository.ApartmentUnitRepository;
+import java.util.List;
 import com.example.demo.service.ApartmentUnitService;
+import com.example.demo.entity.ApartmentUnit;
+import com.example.demo.repository.ApartmentUnitRepository;
 
 @Service
 public class ApartmentUnitServiceImpl implements ApartmentUnitService {
@@ -15,11 +15,11 @@ public class ApartmentUnitServiceImpl implements ApartmentUnitService {
         this.repo = repo;
     }
 
-    public ApartmentUnit saveUnit(ApartmentUnit unit) {
+    public ApartmentUnit save(ApartmentUnit unit) {
         return repo.save(unit);
     }
 
-    public List<ApartmentUnit> getAllUnits() {
+    public List<ApartmentUnit> findAll() {
         return repo.findAll();
     }
 }

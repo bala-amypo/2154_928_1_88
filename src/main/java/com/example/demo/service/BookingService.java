@@ -1,9 +1,8 @@
 package com.example.demo.service;
 
-import java.util.List;
-import com.example.demo.model.Booking;
+import com.example.demo.entity.Booking;
 
 public interface BookingService {
-    Booking saveBooking(Booking booking);
-    List<Booking> getAllBookings();
+    Booking save(Booking booking);
+    Booking getById(Long id);
 }

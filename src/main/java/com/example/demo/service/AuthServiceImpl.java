@@ -1,25 +1,27 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
 import org.springframework.stereotype.Service;
-import com.example.demo.model.User;
+import com.example.demo.service.AuthService;
+import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.UserService;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository repo;
 
-    public UserServiceImpl(UserRepository repo) {
+    public AuthServiceImpl(UserRepository repo) {
         this.repo = repo;
     }
 
-    public User saveUser(User user) {
+    public User register(User user) {
         return repo.save(user);
     }
 
-    public List<User> getAllUsers() {
-        return repo.findAll();
+    public User login(User user) {
+        return repo.findAll().stream()
+                .filter(u -> u.getEmail().equals(user.getEmail()))
+                .findFirst()
+                .orElse(null);
     }
 }
