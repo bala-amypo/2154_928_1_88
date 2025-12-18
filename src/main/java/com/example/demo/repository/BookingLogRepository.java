@@ -1,7 +1,5 @@
 package com.example.demo.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.demo.model.BookingLog;
-
-public interface BookingLogRepository extends JpaRepository<BookingLog, Long> {
-}
+import com.example.demo.entity.*;
+public interface BookingLogRepository extends JpaRepository<BookingLog, Long> {}
