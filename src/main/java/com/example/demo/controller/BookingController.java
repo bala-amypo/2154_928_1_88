@@ -1,29 +1,26 @@
+package com.example.demo.controller;
+
+import org.springframework.web.bind.annotation.*;
+import com.example.demo.entity.Booking;
+import com.example.demo.service.BookingService;
+
 @RestController
 @RequestMapping("/bookings")
 public class BookingController {
 
-    private final BookingService bookingService;
+    private final BookingService service;
 
-    @Autowired
-    public BookingController(BookingService bookingService) {
-        this.bookingService = bookingService;
+    public BookingController(BookingService service) {
+        this.service = service;
     }
 
-    // Create booking for a facility and user
-    @PostMapping("/{facilityId}/{userId}")
-    public Booking createBooking(@PathVariable Long facilityId, @PathVariable Long userId) {
-        return bookingService.createBooking(facilityId, userId);
+    @PostMapping
+    public Booking create(@RequestBody Booking booking) {
+        return service.save(booking);
     }
 
-    // Cancel booking
-    @PutMapping("/cancel/{bookingId}")
-    public Booking cancelBooking(@PathVariable Long bookingId) {
-        return bookingService.cancelBooking(bookingId);
-    }
-
-    // Get booking by id
-    @GetMapping("/{bookingId}")
-    public Booking getBooking(@PathVariable Long bookingId) {
-        return bookingService.getBookingById(bookingId);
+    @GetMapping("/{id}")
+    public Booking get(@PathVariable Long id) {
+        return service.getById(id);
     }
 }
