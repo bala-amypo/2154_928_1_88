@@ -1,9 +1,7 @@
 package com.example.demo.controller;
 
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
 import java.util.List;
-
 import com.example.demo.entity.ApartmentUnit;
 import com.example.demo.service.ApartmentUnitService;
 
@@ -18,15 +16,13 @@ public class ApartmentUnitController {
     }
 
     @PostMapping("/assign/{userId}")
-    public ApartmentUnit create(
-            @PathVariable Long userId,
-            @Valid @RequestBody ApartmentUnit units) {
-
-        return service.save(units, userId);
+    public ApartmentUnit create(@RequestBody ApartmentUnit units) {
+        return service.save(units);
     }
 
     @GetMapping("/user/{userId}")
-    public List<ApartmentUnit> getAll(@PathVariable Long userId) {
-        return service.findByUserId(userId);
+    public List<ApartmentUnit> getAll() {
+        return service.findAll();
     }
 }
+
