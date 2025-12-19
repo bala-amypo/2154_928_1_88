@@ -4,27 +4,34 @@ package com.example.demo.service;
 import com.example.demo.entity.ApartmentUnit;
 import com.example.demo.entity.User;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.ApartmentUnitRepo;
-import com.example.demo.repository.UserRepo;
+import com.example.demo.repository.ApartmentUnitRepository;
+import com.example.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class ApartmentUnitServiceImpl implements ApartmentUnitService {
+public class ApartmentUnitServiceImpl {
 
-    private final ApartmentUnitRepo unitRepo;
-    private final UserRepo userRepo;
+    private final ApartmentUnitRepository unitRepository;
+    private final UserRepository userRepository;
 
-    public ApartmentUnitServiceImpl(ApartmentUnitRepo unitRepo, UserRepo userRepo) {
-        this.unitRepo = unitRepo;
-        this.userRepo = userRepo;
+    public ApartmentUnitServiceImpl(ApartmentUnitRepository unitRepository,
+                                    UserRepository userRepository) {
+        this.unitRepository = unitRepository;
+        this.userRepository = userRepository;
     }
 
-    @Override
-    public ApartmentUnit assignUnit(Long userId, ApartmentUnit apartmentUnit) {
-        User user = userRepo.findById(userId)
+    public ApartmentUnit assignUnit(ApartmentUnit unit, Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
+        unit.setUser(user);
+        return unitRepository.save(unit);
+    }
 
-        apartmentUnit.setUser(user);
-        return unitRepo.save(apartmentUnit);
+    public List<ApartmentUnit> getUnitsByUser(Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
+        return unitRepository.findByUserId(userId);
     }
 }
