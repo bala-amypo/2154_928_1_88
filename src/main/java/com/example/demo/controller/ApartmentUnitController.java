@@ -6,7 +6,7 @@ import com.example.demo.entity.ApartmentUnit;
 import com.example.demo.service.ApartmentUnitService;
 
 @RestController
-@RequestMapping("/assign")
+@RequestMapping("/units")
 public class ApartmentUnitController {
 
     private final ApartmentUnitService service;
@@ -15,12 +15,12 @@ public class ApartmentUnitController {
         this.service = service;
     }
 
-    @PostMapping
-    public ApartmentUnit create(@RequestBody ApartmentUnit assign) {
-        return service.save(assign);
+    @PostMapping("/assign{userId}")
+    public ApartmentUnit create(@RequestBody ApartmentUnit units) {
+        return service.save(units);
     }
 
-    @GetMapping
+    @GetMapping("/user{userId}")
     public List<ApartmentUnit> getAll() {
         return service.findAll();
     }
