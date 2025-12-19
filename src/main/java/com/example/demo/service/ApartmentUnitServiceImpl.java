@@ -19,7 +19,6 @@ public class ApartmentUnitServiceImpl implements ApartmentUnitService {
         this.userRepo = userRepo;
     }
 
-    // BUSINESS VALIDATION: check if user exists before saving
     @Override
     public ApartmentUnit save(ApartmentUnit unit, Long userId) {
         User user = userRepo.findById(userId)

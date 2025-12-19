@@ -16,7 +16,6 @@ public class ApartmentUnitController {
         this.service = service;
     }
 
-    // @Valid ensures entity annotations are checked
     @PostMapping("/assign/{userId}")
     public ApartmentUnit create(@PathVariable Long userId, @Valid @RequestBody ApartmentUnit units) {
         return service.save(units, userId);

@@ -20,7 +20,7 @@ public class ApartmentUnit {
 
     @NotNull(message = "User must be assigned")
     @ManyToOne
-    private User user;
+    private User user; // Make sure User entity exists
 
     public Long getId() { return id; }
 
