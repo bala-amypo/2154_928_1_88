@@ -15,12 +15,12 @@ public class ApartmentUnitController {
         this.service = service;
     }
 
-    @PostMapping("/assign{userId}")
+    @PostMapping("/assign/{userId}")
     public ApartmentUnit create(@RequestBody ApartmentUnit units) {
         return service.save(units);
     }
 
-    @GetMapping("/user{userId}")
+    @GetMapping("/user/{userId}")
     public List<ApartmentUnit> getAll() {
         return service.findAll();
     }
