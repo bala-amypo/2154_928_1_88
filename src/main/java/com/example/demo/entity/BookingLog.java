@@ -1,10 +1,8 @@
-// src/main/java/com/example/demo/entity/BookingLog.java
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "booking_log")
@@ -15,34 +13,13 @@ public class BookingLog {
     private Long id;
 
     @NotBlank(message = "Log message cannot be empty")
-    @Size(max = 255, message = "Log message must not exceed 255 characters")
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String message;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id", nullable = false)
-    @NotNull(message = "Booking reference is required")
+    @JsonIgnore   // ✅ THIS FIXES YOUR SWAGGER ISSUE
     private Booking booking;
 
-    // --- getters & setters ---
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Booking getBooking() {
-        return booking;
-    }
-
-    public void setBooking(Booking booking) {
-        this.booking = booking;
-    }
+    // getters & setters
 }

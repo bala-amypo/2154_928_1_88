@@ -1,45 +1,28 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
+import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Name is required")
     private String name;
-
-    @Email(message = "Email should be valid")
-    @NotBlank(message = "Email is required")
     private String email;
 
-    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ApartmentUnit> units;
 
-    public Long getId() { 
-        return id; 
-        }
-        public void setId(Long id) { this.id = id; }
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Booking> bookings;
 
-    public String getName() { 
-        return name;
-     }
-    public void setName(String name) { this.name = name; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public List<ApartmentUnit> getUnits() {
-     return units;
-    }
-
-    public void setUnits(List<ApartmentUnit> units) { 
-    this.units = units; 
-    }
+    // getters & setters
 }
