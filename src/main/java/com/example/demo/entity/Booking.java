@@ -3,34 +3,48 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "booking")
 public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long facilityId;
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "facility_id", nullable = false)
+    private Facility facility;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Column(nullable = false)
     private String status;
+
+    // Getters and Setters
 
     public Long getId() {
         return id;
     }
 
-    public Long getFacilityId() {
-        return facilityId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setFacilityId(Long facilityId) {
-        this.facilityId = facilityId;
+    public Facility getFacility() {
+        return facility;
     }
 
-    public Long getUserId() {
-        return userId;
+    public void setFacility(Facility facility) {
+        this.facility = facility;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getStatus() {
