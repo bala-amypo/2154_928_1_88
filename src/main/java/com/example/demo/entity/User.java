@@ -30,6 +30,11 @@ public class User {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public List<ApartmentUnit> getUnits() { return units; }
-    public void setUnits(List<ApartmentUnit> units) { this.units = units; }
+    public List<ApartmentUnit> getUnits() {
+     return units;
+    }
+    
+    public void setUnits(List<ApartmentUnit> units) { 
+    this.units = units; 
+    }
 }
