@@ -1,6 +1,12 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.example.demo.entity.Booking;
 import com.example.demo.service.BookingService;
 
@@ -14,13 +20,22 @@ public class BookingController {
         this.service = service;
     }
 
-    @PostMapping
-    public Booking create(@RequestBody Booking booking) {
-        return service.save(booking);
+    @PostMapping("/{facilityId}/{userId}")
+    public Booking createBooking(
+            @PathVariable Long facilityId,
+            @PathVariable Long userId) {
+        return service.createBooking(facilityId, userId);
     }
 
-    @GetMapping("/{id}")
-    public Booking get(@PathVariable Long id) {
-        return service.getById(id);
+    @PutMapping("/cancel/{bookingId}")
+    public Booking cancelBooking(
+            @PathVariable Long bookingId) {
+        return service.cancelBooking(bookingId);
+    }
+
+    @GetMapping("/{bookingId}")
+    public Booking getBooking(
+            @PathVariable Long bookingId) {
+        return service.getById(bookingId);
     }
 }
