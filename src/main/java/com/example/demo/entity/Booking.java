@@ -9,19 +9,35 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String bookingDate;
+    private Long facilityId;
+    private Long userId;
+    private String status;
 
-    @ManyToOne
-    private Facility facility;
+    public Long getId() {
+        return id;
+    }
 
-    @ManyToOne
-    private User user;
+    public Long getFacilityId() {
+        return facilityId;
+    }
 
-    public Long getId() { return id; }
-    public String getBookingDate() { return bookingDate; }
-    public void setBookingDate(String bookingDate) { this.bookingDate = bookingDate; }
-    public Facility getFacility() { return facility; }
-    public void setFacility(Facility facility) { this.facility = facility; }
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public void setFacilityId(Long facilityId) {
+        this.facilityId = facilityId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
