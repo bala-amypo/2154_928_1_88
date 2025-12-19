@@ -1,4 +1,4 @@
-// File: src/main/java/com/example/demo/controller/BookingController.java
+// File: BookingController.java
 package com.example.demo.controller;
 
 import com.example.demo.entity.Booking;
@@ -16,22 +16,28 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
+    // CREATE booking
     @PostMapping("/{facilityId}/{userId}")
     public ResponseEntity<Booking> createBooking(
             @PathVariable Long facilityId,
             @PathVariable Long userId) {
+
         Booking booking = bookingService.createBooking(facilityId, userId);
         return ResponseEntity.ok(booking);
     }
 
+    // CANCEL booking
     @PutMapping("/cancel/{bookingId}")
     public ResponseEntity<Booking> cancelBooking(@PathVariable Long bookingId) {
+
         Booking booking = bookingService.cancelBooking(bookingId);
         return ResponseEntity.ok(booking);
     }
 
-     @GetMapping("/{bookingId}")
+    // ✅ GET booking by ID
+    @GetMapping("/{bookingId}")
     public ResponseEntity<Booking> getBookingById(@PathVariable Long bookingId) {
+
         Booking booking = bookingService.getBookingById(bookingId);
         return ResponseEntity.ok(booking);
     }

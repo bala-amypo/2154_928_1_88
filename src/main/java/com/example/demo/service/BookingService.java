@@ -6,4 +6,5 @@ import com.example.demo.entity.Booking;
 public interface BookingService {
     Booking createBooking(Long facilityId, Long userId);
     Booking cancelBooking(Long bookingId);
+    
 }
