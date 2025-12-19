@@ -29,4 +29,10 @@ public class BookingController {
         Booking booking = bookingService.cancelBooking(bookingId);
         return ResponseEntity.ok(booking);
     }
+
+     @GetMapping("/{bookingId}")
+    public ResponseEntity<Booking> getBookingById(@PathVariable Long bookingId) {
+        Booking booking = bookingService.getBookingById(bookingId);
+        return ResponseEntity.ok(booking);
+    }
 }
