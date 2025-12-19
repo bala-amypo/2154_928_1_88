@@ -1,44 +1,57 @@
-// File: BookingController.java
 package com.example.demo.controller;
 
 import com.example.demo.entity.Booking;
-import com.example.demo.service.BookingService;
+import com.example.demo.repository.BookingRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/bookings")
 public class BookingController {
 
-    private final BookingService bookingService;
+    @Autowired
+    private BookingRepo bookingRepo;
 
-    public BookingController(BookingService bookingService) {
-        this.bookingService = bookingService;
-    }
-
-    // CREATE booking
+    // POST /bookings/{facilityId}/{userId} → create a booking
     @PostMapping("/{facilityId}/{userId}")
     public ResponseEntity<Booking> createBooking(
             @PathVariable Long facilityId,
             @PathVariable Long userId) {
 
-        Booking booking = bookingService.createBooking(facilityId, userId);
-        return ResponseEntity.ok(booking);
+        Booking booking = new Booking();
+        booking.setFacilityId(facilityId);
+        booking.setUserId(userId);
+        booking.setStatus("CONFIRMED");
+        booking.setCreatedAt(LocalDateTime.now());
+
+        Booking savedBooking = bookingRepo.save(booking);
+        return ResponseEntity.ok(savedBooking);
     }
 
-    // CANCEL booking
+    // GET /bookings/{bookingId} → get booking details
+    @GetMapping("/{bookingId}")
+    public ResponseEntity<Booking> getBooking(@PathVariable Long bookingId) {
+        Optional<Booking> booking = bookingRepo.findById(bookingId);
+        return booking.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // PUT /bookings/cancel/{bookingId} → cancel a booking
     @PutMapping("/cancel/{bookingId}")
     public ResponseEntity<Booking> cancelBooking(@PathVariable Long bookingId) {
+        Optional<Booking> optionalBooking = bookingRepo.findById(bookingId);
 
-        Booking booking = bookingService.cancelBooking(bookingId);
-        return ResponseEntity.ok(booking);
-    }
-
-    // ✅ GET booking by ID
-    @GetMapping("/{bookingId}")
-    public ResponseEntity<Booking> getBookingById(@PathVariable Long bookingId) {
-
-        Booking booking = bookingService.getBookingById(bookingId);
-        return ResponseEntity.ok(booking);
+        if (optionalBooking.isPresent()) {
+            Booking booking = optionalBooking.get();
+            booking.setStatus("CANCELLED");
+            bookingRepo.save(booking);
+            return ResponseEntity.ok(booking);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
