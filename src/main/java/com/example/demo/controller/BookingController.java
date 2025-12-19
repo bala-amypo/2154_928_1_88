@@ -13,7 +13,7 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
-    // Create booking
+    // POST /bookings/{facilityId}/{userId} → create booking
     @PostMapping("/{facilityId}/{userId}")
     public ResponseEntity<Booking> createBooking(
             @PathVariable Long facilityId,
@@ -22,7 +22,7 @@ public class BookingController {
         return ResponseEntity.ok(booking);
     }
 
-    // Get booking by ID
+    // GET /bookings/{bookingId} → get booking details
     @GetMapping("/{bookingId}")
     public ResponseEntity<Booking> getBooking(@PathVariable Long bookingId) {
         return bookingService.getBooking(bookingId)
@@ -30,7 +30,7 @@ public class BookingController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Cancel booking
+    // PUT /bookings/cancel/{bookingId} → cancel booking
     @PutMapping("/cancel/{bookingId}")
     public ResponseEntity<Booking> cancelBooking(@PathVariable Long bookingId) {
         return bookingService.cancelBooking(bookingId)
