@@ -1,7 +1,7 @@
+// File: src/main/java/com/example/demo/entity/ApartmentUnit.java
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -15,20 +15,22 @@ public class ApartmentUnit {
     @NotBlank(message = "Unit number is required")
     private String unitNumber;
 
-    @Min(value = 0, message = "Floor must be 0 or greater")
-    private int floor;
+    @NotNull(message = "Floor is required")
+    private Integer floor;
 
-    @NotNull(message = "User must be assigned")
     @ManyToOne
-    private User user; // Make sure User entity exists
+    @JoinColumn(name = "user_id")
+    private User user;
 
+    // getters and setters
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getUnitNumber() { return unitNumber; }
     public void setUnitNumber(String unitNumber) { this.unitNumber = unitNumber; }
 
-    public int getFloor() { return floor; }
-    public void setFloor(int floor) { this.floor = floor; }
+    public Integer getFloor() { return floor; }
+    public void setFloor(Integer floor) { this.floor = floor; }
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }

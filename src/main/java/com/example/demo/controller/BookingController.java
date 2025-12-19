@@ -1,10 +1,10 @@
+// File: src/main/java/com/example/demo/controller/BookingController.java
 package com.example.demo.controller;
-
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 import com.example.demo.entity.Booking;
 import com.example.demo.service.BookingService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/bookings")
@@ -16,21 +16,17 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    // Create Booking
     @PostMapping("/{facilityId}/{userId}")
-    public Booking createBooking(@PathVariable Long facilityId, @PathVariable Long userId) {
-        return bookingService.createBooking(facilityId, userId);
+    public ResponseEntity<Booking> createBooking(
+            @PathVariable Long facilityId,
+            @PathVariable Long userId) {
+        Booking booking = bookingService.createBooking(facilityId, userId);
+        return ResponseEntity.ok(booking);
     }
 
-    // Cancel Booking
     @PutMapping("/cancel/{bookingId}")
-    public Booking cancelBooking(@PathVariable Long bookingId) {
-        return bookingService.cancelBooking(bookingId);
-    }
-
-    // Get Booking by Id
-    @GetMapping("/{bookingId}")
-    public Booking getBooking(@PathVariable Long bookingId) {
-        return bookingService.getBookingById(bookingId);
+    public ResponseEntity<Booking> cancelBooking(@PathVariable Long bookingId) {
+        Booking booking = bookingService.cancelBooking(bookingId);
+        return ResponseEntity.ok(booking);
     }
 }
