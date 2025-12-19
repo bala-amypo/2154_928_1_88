@@ -1,3 +1,4 @@
+// src/main/java/com/example/demo/service/BookingLogServiceImpl.java
 package com.example.demo.service;
 
 import java.util.List;
@@ -14,11 +15,6 @@ public class BookingLogServiceImpl implements BookingLogService {
 
     public BookingLogServiceImpl(BookingLogRepository repository) {
         this.repository = repository;
-    }
-
-    @Override
-    public BookingLog saveLog(BookingLog log) {
-        return repository.save(log);
     }
 
     @Override

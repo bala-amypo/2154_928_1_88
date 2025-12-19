@@ -1,9 +1,9 @@
+// src/main/java/com/example/demo/entity/BookingLog.java
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 @Entity
 public class BookingLog {
@@ -12,12 +12,12 @@ public class BookingLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Message must not be empty")
-    @Size(max = 255, message = "Message must not exceed 255 characters")
+    @NotBlank(message = "Log message cannot be empty")
     private String message;
 
-    @NotNull(message = "Booking must not be null")
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "booking_id")
+    @NotNull(message = "Booking reference is required")
     private Booking booking;
 
     public Long getId() {
