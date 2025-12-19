@@ -1,9 +1,8 @@
 package com.example.demo.controller;
 
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import java.util.List;
-
 import com.example.demo.entity.ApartmentUnit;
 import com.example.demo.service.ApartmentUnitService;
 
@@ -17,11 +16,9 @@ public class ApartmentUnitController {
         this.service = service;
     }
 
+    // @Valid ensures entity annotations are checked
     @PostMapping("/assign/{userId}")
-    public ApartmentUnit create(
-            @PathVariable Long userId,
-            @Valid @RequestBody ApartmentUnit units) {
-
+    public ApartmentUnit create(@PathVariable Long userId, @Valid @RequestBody ApartmentUnit units) {
         return service.save(units, userId);
     }
 

@@ -1,9 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.ApartmentUnit;
 import java.util.List;
+import com.example.demo.entity.ApartmentUnit;
 
 public interface ApartmentUnitService {
-    ApartmentUnit save(ApartmentUnit unit);
-    List<ApartmentUnit> findAll();
+    ApartmentUnit save(ApartmentUnit unit, Long userId);
+    List<ApartmentUnit> findByUserId(Long userId);
 }
