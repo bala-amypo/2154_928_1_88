@@ -1,8 +1,8 @@
 package com.example.demo.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.entity.Booking;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BookingRepository extends JpaRepository<Booking, Long> {
-    // Custom queries if needed
+public interface BookingRepositry extends JpaRepository<Booking, Long> {
+    // You can add custom queries here if needed
 }
