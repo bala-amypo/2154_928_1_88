@@ -23,4 +23,8 @@ public class BookingController {
     public Booking get(@PathVariable Long id) {
         return service.getById(id);
     }
+    @PutMapping("/{id}")
+    public Booking get(@PathVariable Long id) {
+        return service.getById(id);
+    }
 }
