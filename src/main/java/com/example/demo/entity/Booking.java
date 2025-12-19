@@ -1,29 +1,51 @@
+// src/main/java/com/example/demo/entity/Booking.java
 package com.example.demo.entity;
 
-import java.util.List;
-
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "booking")
 public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private String status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "facility_id")
     private Facility facility;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
-    private List<BookingLog> logs;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     // getters & setters
+    public Long getId() {
+        return id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Facility getFacility() {
+        return facility;
+    }
+
+    public void setFacility(Facility facility) {
+        this.facility = facility;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
