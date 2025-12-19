@@ -33,3 +33,4 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new RuntimeException("Booking not found with id " + bookingId));
     }
 }
+
