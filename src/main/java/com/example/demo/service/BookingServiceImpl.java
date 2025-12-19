@@ -2,16 +2,16 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Booking;
-import com.example.demo.entity.Facility;
 import com.example.demo.entity.User;
+import com.example.demo.entity.Facility;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.BookingRepository;
-import com.example.demo.repository.FacilityRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.FacilityRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BookingServiceImpl {
+public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
@@ -25,6 +25,7 @@ public class BookingServiceImpl {
         this.facilityRepository = facilityRepository;
     }
 
+    @Override
     public Booking createBooking(Long facilityId, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
@@ -40,6 +41,7 @@ public class BookingServiceImpl {
         return bookingRepository.save(booking);
     }
 
+    @Override
     public Booking cancelBooking(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id " + bookingId));
