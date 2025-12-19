@@ -19,7 +19,7 @@ public class ApartmentUnit {
     @JsonIgnore
     private User user;
 
-    // ===== REQUIRED GETTERS & SETTERS =====
+    // ===== getters & setters =====
 
     public Long getId() {
         return id;
@@ -37,6 +37,10 @@ public class ApartmentUnit {
         return user;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setUnitNumber(String unitNumber) {
         this.unitNumber = unitNumber;
     }
@@ -45,7 +49,7 @@ public class ApartmentUnit {
         this.floor = floor;
     }
 
-    public void setUser(User user) {   // ✅ FIX
+    public void setUser(User user) {
         this.user = user;
     }
 }
