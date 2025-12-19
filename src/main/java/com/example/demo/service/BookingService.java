@@ -1,8 +1,38 @@
 package com.example.demo.service;
 
+import org.springframework.stereotype.Service;
 import com.example.demo.entity.Booking;
+import com.example.demo.repository.BookingRepository;
 
-public interface BookingService {
-    Booking save(Booking booking);
-    Booking getById(Long id);
+@Service
+public class BookingService {
+
+    private final BookingRepository repository;
+
+    public BookingService(BookingRepository repository) {
+        this.repository = repository;
+    }
+
+    // REQUIRED by controller
+    public Booking createBooking(Long facilityId, Long userId) {
+        Booking booking = new Booking();
+        booking.setFacilityId(facilityId);
+        booking.setUserId(userId);
+        booking.setStatus("BOOKED");
+        return repository.save(booking);
+    }
+
+    // REQUIRED by controller
+    public Booking cancelBooking(Long bookingId) {
+        Booking booking = repository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        booking.setStatus("CANCELLED");
+        return repository.save(booking);
+    }
+
+    // Already used
+    public Booking getById(Long bookingId) {
+        return repository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+    }
 }
