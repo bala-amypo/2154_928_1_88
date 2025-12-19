@@ -31,3 +31,4 @@ public class BookingLogController {
         return service.findByBookingId(bookingId);
     }
 }
+
