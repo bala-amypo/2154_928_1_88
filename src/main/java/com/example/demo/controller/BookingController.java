@@ -1,11 +1,7 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 import com.example.demo.entity.Booking;
 import com.example.demo.service.BookingService;
@@ -14,31 +10,27 @@ import com.example.demo.service.BookingService;
 @RequestMapping("/bookings")
 public class BookingController {
 
-    private final BookingService service;
+    private final BookingService bookingService;
 
-    public BookingController(BookingService service) {
-        this.service = service;
+    public BookingController(BookingService bookingService) {
+        this.bookingService = bookingService;
     }
 
-    // POST /bookings/{facilityId}/{userId}
+    // Create Booking
     @PostMapping("/{facilityId}/{userId}")
-    public Booking createBooking(
-            @PathVariable Long facilityId,
-            @PathVariable Long userId) {
-        return service.createBooking(facilityId, userId);
+    public Booking createBooking(@PathVariable Long facilityId, @PathVariable Long userId) {
+        return bookingService.createBooking(facilityId, userId);
     }
 
-    // PUT /bookings/cancel/{bookingId}
+    // Cancel Booking
     @PutMapping("/cancel/{bookingId}")
-    public Booking cancelBooking(
-            @PathVariable Long bookingId) {
-        return service.cancelBooking(bookingId);
+    public Booking cancelBooking(@PathVariable Long bookingId) {
+        return bookingService.cancelBooking(bookingId);
     }
 
-    // GET /bookings/{bookingId}
+    // Get Booking by Id
     @GetMapping("/{bookingId}")
-    public Booking getBooking(
-            @PathVariable Long bookingId) {
-        return service.getById(bookingId);
+    public Booking getBooking(@PathVariable Long bookingId) {
+        return bookingService.getBookingById(bookingId);
     }
 }
