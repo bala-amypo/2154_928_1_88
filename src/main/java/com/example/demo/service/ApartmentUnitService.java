@@ -3,6 +3,9 @@ package com.example.demo.service;
 
 import com.example.demo.entity.ApartmentUnit;
 
+import java.util.List;
+
 public interface ApartmentUnitService {
-    ApartmentUnit assignUnit(Long userId, ApartmentUnit apartmentUnit);
+    ApartmentUnit assignUnit(ApartmentUnit unit, Long userId);
+    List<ApartmentUnit> getUnitsByUser(Long userId);
 }

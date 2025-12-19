@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ApartmentUnitServiceImpl {
+public class ApartmentUnitServiceImpl implements ApartmentUnitService {
 
     private final ApartmentUnitRepository unitRepository;
     private final UserRepository userRepository;
@@ -22,6 +22,7 @@ public class ApartmentUnitServiceImpl {
         this.userRepository = userRepository;
     }
 
+    @Override
     public ApartmentUnit assignUnit(ApartmentUnit unit, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
@@ -29,6 +30,7 @@ public class ApartmentUnitServiceImpl {
         return unitRepository.save(unit);
     }
 
+    @Override
     public List<ApartmentUnit> getUnitsByUser(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));

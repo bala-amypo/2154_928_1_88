@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/units")
 public class ApartmentUnitController {
@@ -17,16 +19,18 @@ public class ApartmentUnitController {
         this.unitService = unitService;
     }
 
+    // Assign a unit to a user
     @PostMapping("/assign/{userId}")
-    public ResponseEntity<ApartmentUnit> assignUnit(
-            @PathVariable Long userId,
-            @Valid @RequestBody ApartmentUnit apartmentUnit) {
-        ApartmentUnit savedUnit = unitService.assignUnit(userId, apartmentUnit);
+    public ResponseEntity<ApartmentUnit> assignUnit(@PathVariable Long userId,
+                                                    @Valid @RequestBody ApartmentUnit unit) {
+        ApartmentUnit savedUnit = unitService.assignUnit(unit, userId);
         return ResponseEntity.ok(savedUnit);
     }
 
+    // Get all units assigned to a user
     @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getUserUnits(@PathVariable Long userId) {
-        return ResponseEntity.ok(unitService.getUnitsByUser(userId));
+    public ResponseEntity<List<ApartmentUnit>> getUnitsByUser(@PathVariable Long userId) {
+        List<ApartmentUnit> units = unitService.getUnitsByUser(userId);
+        return ResponseEntity.ok(units);
     }
 }
