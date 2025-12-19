@@ -24,5 +24,33 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Booking> bookings;
 
-    // getters & setters
+    // ===== REQUIRED GETTERS & SETTERS =====
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {          // ✅ FIX
+        return email;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) { // ✅ FIX
+        this.email = email;
+    }
+
+    public List<ApartmentUnit> getUnits() {
+        return units;
+    }
+
+    public void setUnits(List<ApartmentUnit> units) {
+        this.units = units;
+    }
 }
