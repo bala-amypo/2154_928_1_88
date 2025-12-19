@@ -22,9 +22,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<ApartmentUnit> units;
 
-    public Long getId() { return id; }
+    public Long getId() { 
+        return id; 
+        }
+        public void setId(Long id) { this.id = id; }
 
-    public String getName() { return name; }
+    public String getName() { 
+        return name;
+     }
     public void setName(String name) { this.name = name; }
 
     public String getEmail() { return email; }
@@ -33,7 +38,7 @@ public class User {
     public List<ApartmentUnit> getUnits() {
      return units;
     }
-    
+
     public void setUnits(List<ApartmentUnit> units) { 
     this.units = units; 
     }
