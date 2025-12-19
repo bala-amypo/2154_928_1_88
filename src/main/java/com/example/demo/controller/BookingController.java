@@ -1,8 +1,8 @@
+// File: BookingController.java
 package com.example.demo.controller;
 
 import com.example.demo.entity.Booking;
 import com.example.demo.service.BookingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,31 +10,35 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/bookings")
 public class BookingController {
 
-    @Autowired
-    private BookingService bookingService;
+    private final BookingService bookingService;
 
-    // POST /bookings/{facilityId}/{userId} → create booking
+    public BookingController(BookingService bookingService) {
+        this.bookingService = bookingService;
+    }
+
+    // CREATE booking
     @PostMapping("/{facilityId}/{userId}")
     public ResponseEntity<Booking> createBooking(
             @PathVariable Long facilityId,
             @PathVariable Long userId) {
+
         Booking booking = bookingService.createBooking(facilityId, userId);
         return ResponseEntity.ok(booking);
     }
 
-    // GET /bookings/{bookingId} → get booking details
-    @GetMapping("/{bookingId}")
-    public ResponseEntity<Booking> getBooking(@PathVariable Long bookingId) {
-        return bookingService.getBooking(bookingId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    // PUT /bookings/cancel/{bookingId} → cancel booking
+    // CANCEL booking
     @PutMapping("/cancel/{bookingId}")
     public ResponseEntity<Booking> cancelBooking(@PathVariable Long bookingId) {
-        return bookingService.cancelBooking(bookingId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+
+        Booking booking = bookingService.cancelBooking(bookingId);
+        return ResponseEntity.ok(booking);
+    }
+
+    // ✅ GET booking by ID
+    @GetMapping("/{bookingId}")
+    public ResponseEntity<Booking> getBookingById(@PathVariable Long bookingId) {
+
+        Booking booking = bookingService.getBookingById(bookingId);
+        return ResponseEntity.ok(booking);
     }
 }
