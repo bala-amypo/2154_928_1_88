@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import java.util.List;
+
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,7 +20,11 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ApartmentUnit> units;
 
-    // ===== getters & setters =====
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Booking> bookings;
+
+    // ===== REQUIRED GETTERS & SETTERS =====
 
     public Long getId() {
         return id;
@@ -29,20 +34,20 @@ public class User {
         return name;
     }
 
-    public String getEmail() {
+    public String getEmail() {          // ✅ FIX
         return email;
-    }
-
-    public List<ApartmentUnit> getUnits() {
-        return units;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email) { // ✅ FIX
         this.email = email;
+    }
+
+    public List<ApartmentUnit> getUnits() {
+        return units;
     }
 
     public void setUnits(List<ApartmentUnit> units) {
