@@ -1,12 +1,12 @@
-package com.example.demo.entity;
-
-import java.util.List;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 @Entity
-@Table(name = "facility")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Facility {
 
     @Id
@@ -15,10 +15,4 @@ public class Facility {
 
     private String name;
     private String description;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "facility", cascade = CascadeType.ALL)
-    private List<Booking> bookings;
-
-    // getters & setters
 }

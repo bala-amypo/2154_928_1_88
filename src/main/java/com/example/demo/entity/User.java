@@ -1,12 +1,12 @@
-package com.example.demo.entity;
-
-import java.util.List;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 @Entity
-@Table(name = "users")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -15,42 +15,6 @@ public class User {
 
     private String name;
     private String email;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<ApartmentUnit> units;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Booking> bookings;
-
-    // ===== REQUIRED GETTERS & SETTERS =====
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {          // ✅ FIX
-        return email;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEmail(String email) { // ✅ FIX
-        this.email = email;
-    }
-
-    public List<ApartmentUnit> getUnits() {
-        return units;
-    }
-
-    public void setUnits(List<ApartmentUnit> units) {
-        this.units = units;
-    }
+    private String password;
+    private String role;
 }

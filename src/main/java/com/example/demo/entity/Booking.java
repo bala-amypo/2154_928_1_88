@@ -1,29 +1,23 @@
-package com.example.demo.entity;
-
-import java.util.List;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 @Entity
-@Table(name = "booking")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    private String bookingDate;
+
+    @ManyToOne
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "facility_id")
+    @ManyToOne
     private Facility facility;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
-    private List<BookingLog> logs;
-
-    // getters & setters
 }
