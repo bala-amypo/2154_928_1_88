@@ -1,24 +1,25 @@
-// src/main/java/com/example/demo/service/BookingLogServiceImpl.java
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import java.util.List;
-
 import org.springframework.stereotype.Service;
-
-import com.example.demo.entity.BookingLog;
+import com.example.demo.model.BookingLog;
 import com.example.demo.repository.BookingLogRepository;
+import com.example.demo.service.BookingLogService;
 
 @Service
 public class BookingLogServiceImpl implements BookingLogService {
 
-    private final BookingLogRepository repository;
+    private final BookingLogRepository repo;
 
-    public BookingLogServiceImpl(BookingLogRepository repository) {
-        this.repository = repository;
+    public BookingLogServiceImpl(BookingLogRepository repo) {
+        this.repo = repo;
     }
 
-    @Override
-    public List<BookingLog> findByBookingId(Long bookingId) {
-        return repository.findByBookingId(bookingId);
+    public BookingLog saveLog(BookingLog log) {
+        return repo.save(log);
+    }
+
+    public List<BookingLog> getAllLogs() {
+        return repo.findAll();
     }
 }

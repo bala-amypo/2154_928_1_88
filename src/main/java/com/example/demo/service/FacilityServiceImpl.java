@@ -1,28 +1,25 @@
-// File: src/main/java/com/example/demo/service/FacilityServiceImpl.java
-package com.example.demo.service;
-
-import com.example.demo.entity.Facility;
-import com.example.demo.repository.FacilityRepository;
-import org.springframework.stereotype.Service;
+package com.example.demo.service.impl;
 
 import java.util.List;
+import org.springframework.stereotype.Service;
+import com.example.demo.model.Facility;
+import com.example.demo.repository.FacilityRepository;
+import com.example.demo.service.FacilityService;
 
 @Service
 public class FacilityServiceImpl implements FacilityService {
 
-    private final FacilityRepository facilityRepository;
+    private final FacilityRepository repo;
 
-    public FacilityServiceImpl(FacilityRepository facilityRepository) {
-        this.facilityRepository = facilityRepository;
+    public FacilityServiceImpl(FacilityRepository repo) {
+        this.repo = repo;
     }
 
-    @Override
-    public List<Facility> getAllFacilities() {
-        return facilityRepository.findAll();
-    }
-
-    @Override
     public Facility saveFacility(Facility facility) {
-        return facilityRepository.save(facility);
+        return repo.save(facility);
+    }
+
+    public List<Facility> getAllFacilities() {
+        return repo.findAll();
     }
 }

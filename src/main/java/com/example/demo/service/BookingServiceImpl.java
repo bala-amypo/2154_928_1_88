@@ -1,36 +1,25 @@
-// File: BookingServiceImpl.java
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
-import com.example.demo.entity.Booking;
-import com.example.demo.repository.BookingRepository;
+import java.util.List;
 import org.springframework.stereotype.Service;
+import com.example.demo.model.Booking;
+import com.example.demo.repository.BookingRepository;
+import com.example.demo.service.BookingService;
 
 @Service
 public class BookingServiceImpl implements BookingService {
 
-    private final BookingRepository bookingRepository;
+    private final BookingRepository repo;
 
-    public BookingServiceImpl(BookingRepository bookingRepository) {
-        this.bookingRepository = bookingRepository;
+    public BookingServiceImpl(BookingRepository repo) {
+        this.repo = repo;
     }
 
-    @Override
-    public Booking createBooking(Long facilityId, Long userId) {
-        // existing logic
-        return null;
+    public Booking saveBooking(Booking booking) {
+        return repo.save(booking);
     }
 
-    @Override
-    public Booking cancelBooking(Long bookingId) {
-        // existing logic
-        return null;
-    }
-
-    // ✅ ADD THIS METHOD
-    @Override
-    public Booking getBookingById(Long bookingId) {
-        return bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new RuntimeException("Booking not found with id " + bookingId));
+    public List<Booking> getAllBookings() {
+        return repo.findAll();
     }
 }
-
