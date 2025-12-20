@@ -1,9 +1,14 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,7 +19,18 @@ public class User {
     private Long id;
 
     private String name;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
     private String password;
-    private String role;
+
+    private String role; // RESIDENT / ADMIN
+
+    @PrePersist
+    public void setDefaultRole() {
+        if (this.role == null || this.role.isEmpty()) {
+            this.role = "RESIDENT";
+        }
+    }
 }
