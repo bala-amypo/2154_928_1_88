@@ -12,7 +12,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    // ✅ Constructor now matches available beans
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -22,8 +21,6 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new BadRequestException("Email already exists");
         }
-
-        // ❗ No password encoding (trainer scope)
         return userRepository.save(user);
     }
 
@@ -31,5 +28,18 @@ public class UserServiceImpl implements UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new BadRequestException("User not found"));
+    }
+
+    // ✅ GET LOGIN LOGIC
+    @Override
+    public User login(String email, String password) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new BadRequestException("Invalid email"));
+
+        if (!user.getPassword().equals(password)) {
+            throw new BadRequestException("Invalid password");
+        }
+
+        return user;
     }
 }

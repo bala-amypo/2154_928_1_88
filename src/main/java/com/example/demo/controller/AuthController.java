@@ -16,9 +16,18 @@ public class AuthController {
         this.userService = userService;
     }
 
-    // Simple register (NO DTO, NO JWT)
+    // ✅ POST REGISTER
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user) {
         return ResponseEntity.ok(userService.register(user));
+    }
+
+    // ✅ GET LOGIN (Trainer required)
+    @GetMapping("/login")
+    public ResponseEntity<User> login(
+            @RequestParam String email,
+            @RequestParam String password) {
+
+        return ResponseEntity.ok(userService.login(email, password));
     }
 }
