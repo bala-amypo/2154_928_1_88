@@ -1,9 +1,14 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "bookings")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,11 +18,38 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String bookingDate;
+    @ManyToOne
+    @JoinColumn(name = "facility_id", nullable = false)
+    private Facility facility;
 
     @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    private Facility facility;
+    private LocalDateTime startTime;
+
+    private LocalDateTime endTime;
+
+    private String status; // CONFIRMED / CANCELLED
+
+    @PrePersist
+    public void prePersist() {
+        if (status == null || status.isEmpty()) {
+            status = "CONFIRMED";
+        }
+        validateTime();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        validateTime();
+    }
+
+    private void validateTime() {
+        if (startTime != null && endTime != null) {
+            if (!endTime.isAfter(startTime)) {
+                throw new IllegalArgumentException("End time must be after start time");
+            }
+        }
+    }
 }
