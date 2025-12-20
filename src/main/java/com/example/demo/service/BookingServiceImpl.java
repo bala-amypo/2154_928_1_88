@@ -1,25 +1,83 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
+import com.example.demo.exception.ConflictException;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.Booking;
+import com.example.demo.model.Facility;
+import com.example.demo.model.User;
 import com.example.demo.repository.BookingRepository;
+import com.example.demo.repository.FacilityRepository;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.service.BookingLogService;
 import com.example.demo.service.BookingService;
 
 @Service
 public class BookingServiceImpl implements BookingService {
 
-    private final BookingRepository repo;
+    private final BookingRepository bookingRepository;
+    private final FacilityRepository facilityRepository;
+    private final UserRepository userRepository;
+    private final BookingLogService bookingLogService;
 
-    public BookingServiceImpl(BookingRepository repo) {
-        this.repo = repo;
+    // 🚨 Constructor order MUST be EXACT
+    public BookingServiceImpl(BookingRepository bookingRepository,
+                              FacilityRepository facilityRepository,
+                              UserRepository userRepository,
+                              BookingLogService bookingLogService) {
+        this.bookingRepository = bookingRepository;
+        this.facilityRepository = facilityRepository;
+        this.userRepository = userRepository;
+        this.bookingLogService = bookingLogService;
     }
 
-    public Booking saveBooking(Booking booking) {
-        return repo.save(booking);
+    @Override
+    public Booking createBooking(Long facilityId, Long userId, Booking booking) {
+
+        Facility facility = facilityRepository.findById(facilityId)
+                .orElseThrow(() -> new BadRequestException("Facility not found"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BadRequestException("User not found"));
+
+        List<Booking> conflicts =
+                bookingRepository.findByFacilityAndStartTimeLessThanAndEndTimeGreaterThan(
+                        facility,
+                        booking.getEndTime(),
+                        booking.getStartTime()
+                );
+
+        if (!conflicts.isEmpty()) {
+            throw new ConflictException("Booking conflict detected");
+        }
+
+        booking.setFacility(facility);
+        booking.setUser(user);
+
+        Booking saved = bookingRepository.save(booking);
+        bookingLogService.addLog(saved.getId(), "Booking created");
+
+        return saved;
     }
 
-    public List<Booking> getAllBookings() {
-        return repo.findAll();
+    @Override
+    public Booking cancelBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new BadRequestException("Booking not found"));
+
+        booking.setStatus("CANCELLED");
+        Booking updated = bookingRepository.save(booking);
+
+        bookingLogService.addLog(updated.getId(), "Booking cancelled");
+        return updated;
+    }
+
+    @Override
+    public Booking getBooking(Long bookingId) {
+        return bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new BadRequestException("Booking not found"));
     }
 }
