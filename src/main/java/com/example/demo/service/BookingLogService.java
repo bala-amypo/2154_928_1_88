@@ -1,10 +1,9 @@
-// src/main/java/com/example/demo/service/BookingLogService.java
 package com.example.demo.service;
 
 import java.util.List;
-import com.example.demo.entity.BookingLog;
+import com.example.demo.model.BookingLog;
 
 public interface BookingLogService {
-
-    List<BookingLog> findByBookingId(Long bookingId);
+    BookingLog saveLog(BookingLog log);
+    List<BookingLog> getAllLogs();
 }
