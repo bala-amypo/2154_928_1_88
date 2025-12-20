@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Facility;
-import com.example.demo.service.FacilityService;
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.example.demo.model.Facility;
+import com.example.demo.service.FacilityService;
 
 @RestController
 @RequestMapping("/facilities")
@@ -16,13 +18,13 @@ public class FacilityController {
         this.facilityService = facilityService;
     }
 
-    @GetMapping
-    public List<Facility> getAllFacilities() {
-        return facilityService.getAllFacilities();
+    @PostMapping
+    public ResponseEntity<Facility> addFacility(@RequestBody Facility facility) {
+        return ResponseEntity.ok(facilityService.addFacility(facility));
     }
 
-    @PostMapping
-    public Facility createFacility(@RequestBody Facility facility) {
-        return facilityService.saveFacility(facility);
+    @GetMapping
+    public ResponseEntity<List<Facility>> getAllFacilities() {
+        return ResponseEntity.ok(facilityService.getAllFacilities());
     }
 }

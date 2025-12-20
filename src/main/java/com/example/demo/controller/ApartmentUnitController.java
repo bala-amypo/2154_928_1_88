@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.ApartmentUnit;
-import com.example.demo.service.ApartmentUnitService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.example.demo.model.ApartmentUnit;
+import com.example.demo.service.ApartmentUnitService;
 
 @RestController
 @RequestMapping("/units")
@@ -16,25 +16,19 @@ public class ApartmentUnitController {
         this.apartmentUnitService = apartmentUnitService;
     }
 
-    @GetMapping
-    public List<ApartmentUnit> getAllUnits() {
-        return apartmentUnitService.getAllUnits();
-    }
-
-    @PostMapping
-    public ApartmentUnit createUnit(@RequestBody ApartmentUnit unit) {
-        return apartmentUnitService.saveUnit(unit);
-    }
-
     @PostMapping("/assign/{userId}")
-    public ApartmentUnit assignUnitToUser(
+    public ResponseEntity<ApartmentUnit> assignUnit(
             @PathVariable Long userId,
-            @RequestParam Long unitId) {
-        return apartmentUnitService.assignUnitToUser(unitId, userId);
+            @RequestBody ApartmentUnit unit) {
+        return ResponseEntity.ok(
+                apartmentUnitService.assignUnitToUser(userId, unit)
+        );
     }
 
     @GetMapping("/user/{userId}")
-    public List<ApartmentUnit> getUnitsByUser(@PathVariable Long userId) {
-        return apartmentUnitService.getUnitsByUser(userId);
+    public ResponseEntity<ApartmentUnit> getUnitByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(
+                apartmentUnitService.getUnitByUser(userId)
+        );
     }
 }
