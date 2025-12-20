@@ -1,9 +1,7 @@
-// File: BookingController.java
 package com.example.demo.controller;
 
 import com.example.demo.entity.Booking;
 import com.example.demo.service.BookingService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,29 +14,20 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    // CREATE booking
     @PostMapping("/{facilityId}/{userId}")
-    public ResponseEntity<Booking> createBooking(
+    public Booking createBooking(
             @PathVariable Long facilityId,
             @PathVariable Long userId) {
-
-        Booking booking = bookingService.createBooking(facilityId, userId);
-        return ResponseEntity.ok(booking);
+        return bookingService.createBooking(facilityId, userId);
     }
 
-    // CANCEL booking
-    @PutMapping("/cancel/{bookingId}")
-    public ResponseEntity<Booking> cancelBooking(@PathVariable Long bookingId) {
-
-        Booking booking = bookingService.cancelBooking(bookingId);
-        return ResponseEntity.ok(booking);
-    }
-
-    // ✅ GET booking by ID
     @GetMapping("/{bookingId}")
-    public ResponseEntity<Booking> getBookingById(@PathVariable Long bookingId) {
+    public Booking getBooking(@PathVariable Long bookingId) {
+        return bookingService.getBookingById(bookingId);
+    }
 
-        Booking booking = bookingService.getBookingById(bookingId);
-        return ResponseEntity.ok(booking);
+    @PutMapping("/cancel/{bookingId}")
+    public Booking cancelBooking(@PathVariable Long bookingId) {
+        return bookingService.cancelBooking(bookingId);
     }
 }

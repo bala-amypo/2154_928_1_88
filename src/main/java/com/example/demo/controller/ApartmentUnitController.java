@@ -1,10 +1,7 @@
-// File: src/main/java/com/example/demo/controller/ApartmentUnitController.java
 package com.example.demo.controller;
 
 import com.example.demo.entity.ApartmentUnit;
 import com.example.demo.service.ApartmentUnitService;
-import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,24 +10,31 @@ import java.util.List;
 @RequestMapping("/units")
 public class ApartmentUnitController {
 
-    private final ApartmentUnitService unitService;
+    private final ApartmentUnitService apartmentUnitService;
 
-    public ApartmentUnitController(ApartmentUnitService unitService) {
-        this.unitService = unitService;
+    public ApartmentUnitController(ApartmentUnitService apartmentUnitService) {
+        this.apartmentUnitService = apartmentUnitService;
     }
 
-    // Assign a unit to a user
+    @GetMapping
+    public List<ApartmentUnit> getAllUnits() {
+        return apartmentUnitService.getAllUnits();
+    }
+
+    @PostMapping
+    public ApartmentUnit createUnit(@RequestBody ApartmentUnit unit) {
+        return apartmentUnitService.saveUnit(unit);
+    }
+
     @PostMapping("/assign/{userId}")
-    public ResponseEntity<ApartmentUnit> assignUnit(@PathVariable Long userId,
-                                                    @Valid @RequestBody ApartmentUnit unit) {
-        ApartmentUnit savedUnit = unitService.assignUnit(unit, userId);
-        return ResponseEntity.ok(savedUnit);
+    public ApartmentUnit assignUnitToUser(
+            @PathVariable Long userId,
+            @RequestParam Long unitId) {
+        return apartmentUnitService.assignUnitToUser(unitId, userId);
     }
 
-    // Get all units assigned to a user
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ApartmentUnit>> getUnitsByUser(@PathVariable Long userId) {
-        List<ApartmentUnit> units = unitService.getUnitsByUser(userId);
-        return ResponseEntity.ok(units);
+    public List<ApartmentUnit> getUnitsByUser(@PathVariable Long userId) {
+        return apartmentUnitService.getUnitsByUser(userId);
     }
 }
