@@ -22,13 +22,13 @@ public class AuthController {
         this.userService = userService;
     }
 
-    // ✅ POST REGISTER
+    
     @PostMapping("/register")
     public ResponseEntity<User> register(@Valid @RequestBody User user) {
         return ResponseEntity.ok(userService.register(user));
     }
 
-    // ✅ GET LOGIN (Trainer required)
+    
     @GetMapping("/login")
     public ResponseEntity<User> login(
             @RequestParam
