@@ -15,7 +15,7 @@ public class ApartmentUnitServiceImpl implements ApartmentUnitService {
     private final ApartmentUnitRepository apartmentUnitRepository;
     private final UserRepository userRepository;
 
-    // 🚨 Constructor order MUST be EXACT
+    
     public ApartmentUnitServiceImpl(ApartmentUnitRepository apartmentUnitRepository,
                                     UserRepository userRepository) {
         this.apartmentUnitRepository = apartmentUnitRepository;

@@ -30,7 +30,7 @@ public class Booking {
 
     private LocalDateTime endTime;
 
-    private String status; // CONFIRMED / CANCELLED
+    private String status; 
 
     @PrePersist
     public void prePersist() {

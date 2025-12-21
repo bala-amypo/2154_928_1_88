@@ -23,7 +23,7 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final BookingLogService bookingLogService;
 
-    // 🚨 Constructor order MUST be EXACT
+    
     public BookingServiceImpl(BookingRepository bookingRepository,
                               FacilityRepository facilityRepository,
                               UserRepository userRepository,

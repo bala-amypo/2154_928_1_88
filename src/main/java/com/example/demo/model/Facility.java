@@ -23,10 +23,10 @@ public class Facility {
 
     private String description;
 
-    // Format: HH:mm
+    
     private String openTime;
 
-    // Format: HH:mm
+    
     private String closeTime;
 
     @PrePersist

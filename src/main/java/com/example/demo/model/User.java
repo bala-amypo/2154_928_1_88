@@ -25,7 +25,7 @@ public class User {
 
     private String password;
 
-    private String role; // RESIDENT / ADMIN
+    private String role; 
 
     @PrePersist
     public void setDefaultRole() {

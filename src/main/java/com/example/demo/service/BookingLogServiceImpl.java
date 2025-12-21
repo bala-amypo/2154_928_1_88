@@ -17,7 +17,7 @@ public class BookingLogServiceImpl implements BookingLogService {
     private final BookingLogRepository bookingLogRepository;
     private final BookingRepository bookingRepository;
 
-    // 🚨 Constructor order MUST be EXACT
+    
     public BookingLogServiceImpl(BookingLogRepository bookingLogRepository,
                                  BookingRepository bookingRepository) {
         this.bookingLogRepository = bookingLogRepository;
