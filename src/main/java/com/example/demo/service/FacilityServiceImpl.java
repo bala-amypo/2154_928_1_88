@@ -14,7 +14,7 @@ public class FacilityServiceImpl implements FacilityService {
 
     private final FacilityRepository facilityRepository;
 
-    // 🚨 Constructor order MUST be EXACT
+    
     public FacilityServiceImpl(FacilityRepository facilityRepository) {
         this.facilityRepository = facilityRepository;
     }

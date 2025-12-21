@@ -8,6 +8,6 @@ public interface UserService {
 
     User findByEmail(String email);
 
-    // ✅ LOGIN
+    
     User login(String email, String password);
 }

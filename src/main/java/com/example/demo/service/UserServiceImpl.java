@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new BadRequestException("User not found"));
     }
 
-    // ✅ GET LOGIN LOGIC
+    
     @Override
     public User login(String email, String password) {
         User user = userRepository.findByEmail(email)
