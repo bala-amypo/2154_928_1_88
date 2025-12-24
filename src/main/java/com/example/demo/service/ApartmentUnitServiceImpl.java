@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.ApartmentUnit;
@@ -11,12 +10,12 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.ApartmentUnitService;
 
 @Service
-@Transactional   // ✅ Transaction added here
 public class ApartmentUnitServiceImpl implements ApartmentUnitService {
 
     private final ApartmentUnitRepository apartmentUnitRepository;
     private final UserRepository userRepository;
 
+    
     public ApartmentUnitServiceImpl(ApartmentUnitRepository apartmentUnitRepository,
                                     UserRepository userRepository) {
         this.apartmentUnitRepository = apartmentUnitRepository;
