@@ -6,9 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "facilities", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "name")
-})
+@Table(
+    name = "facilities",
+    uniqueConstraints = @UniqueConstraint(columnNames = "name")
+)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,19 +24,10 @@ public class Facility {
 
     private String description;
 
-    
+    // Store as HH:mm (example: 09:00)
+    @Column(nullable = false)
     private String openTime;
 
-    
+    @Column(nullable = false)
     private String closeTime;
-
-    @PrePersist
-    @PreUpdate
-    public void validateTime() {
-        if (openTime != null && closeTime != null) {
-            if (openTime.compareTo(closeTime) >= 0) {
-                throw new IllegalArgumentException("Open time must be before close time");
-            }
-        }
-    }
 }
