@@ -3,10 +3,9 @@ package com.example.demo.service.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ConflictException;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.Booking;
 import com.example.demo.model.Facility;
 import com.example.demo.model.User;
@@ -24,6 +23,7 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final BookingLogService bookingLogService;
 
+    
     public BookingServiceImpl(BookingRepository bookingRepository,
                               FacilityRepository facilityRepository,
                               UserRepository userRepository,
@@ -34,9 +34,7 @@ public class BookingServiceImpl implements BookingService {
         this.bookingLogService = bookingLogService;
     }
 
-    // ✅ WRITE TRANSACTION
     @Override
-    @Transactional
     public Booking createBooking(Long facilityId, Long userId, Booking booking) {
 
         Facility facility = facilityRepository.findById(facilityId)
@@ -46,10 +44,10 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new BadRequestException("User not found"));
 
         List<Booking> conflicts =
-                bookingRepository.findConflictingBookings(
+                bookingRepository.findByFacilityAndStartTimeLessThanAndEndTimeGreaterThan(
                         facility,
-                        booking.getStartTime(),
-                        booking.getEndTime()
+                        booking.getEndTime(),
+                        booking.getStartTime()
                 );
 
         if (!conflicts.isEmpty()) {
@@ -65,11 +63,8 @@ public class BookingServiceImpl implements BookingService {
         return saved;
     }
 
-    // ✅ WRITE TRANSACTION
     @Override
-    @Transactional
     public Booking cancelBooking(Long bookingId) {
-
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new BadRequestException("Booking not found"));
 
@@ -80,11 +75,8 @@ public class BookingServiceImpl implements BookingService {
         return updated;
     }
 
-    // ✅ READ-ONLY TRANSACTION (better performance)
     @Override
-    @Transactional(readOnly = true)
     public Booking getBooking(Long bookingId) {
-
         return bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new BadRequestException("Booking not found"));
     }

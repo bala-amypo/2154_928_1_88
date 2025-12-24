@@ -18,11 +18,11 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "facility_id", nullable = false)
     private Facility facility;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -30,7 +30,7 @@ public class Booking {
 
     private LocalDateTime endTime;
 
-    private String status;
+    private String status; 
 
     @PrePersist
     public void prePersist() {
@@ -46,11 +46,10 @@ public class Booking {
     }
 
     private void validateTime() {
-        if (startTime == null || endTime == null) {
-            throw new IllegalArgumentException("Start time and end time are required");
-        }
-        if (!endTime.isAfter(startTime)) {
-            throw new IllegalArgumentException("End time must be after start time");
+        if (startTime != null && endTime != null) {
+            if (!endTime.isAfter(startTime)) {
+                throw new IllegalArgumentException("End time must be after start time");
+            }
         }
     }
 }
