@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.ConflictException;
 import com.example.demo.exception.BadRequestException;
@@ -23,7 +24,6 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final BookingLogService bookingLogService;
 
-    
     public BookingServiceImpl(BookingRepository bookingRepository,
                               FacilityRepository facilityRepository,
                               UserRepository userRepository,
@@ -35,6 +35,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional
     public Booking createBooking(Long facilityId, Long userId, Booking booking) {
 
         Facility facility = facilityRepository.findById(facilityId)
@@ -43,11 +44,12 @@ public class BookingServiceImpl implements BookingService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BadRequestException("User not found"));
 
+        // HQL conflict check
         List<Booking> conflicts =
-                bookingRepository.findByFacilityAndStartTimeLessThanAndEndTimeGreaterThan(
+                bookingRepository.findConflictingBookings(
                         facility,
-                        booking.getEndTime(),
-                        booking.getStartTime()
+                        booking.getStartTime(),
+                        booking.getEndTime()
                 );
 
         if (!conflicts.isEmpty()) {
@@ -64,6 +66,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional
     public Booking cancelBooking(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new BadRequestException("Booking not found"));
@@ -76,6 +79,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Booking getBooking(Long bookingId) {
         return bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new BadRequestException("Booking not found"));
