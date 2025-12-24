@@ -14,6 +14,6 @@ public interface ApartmentUnitRepository extends JpaRepository<ApartmentUnit, Lo
     @Query("SELECT au FROM ApartmentUnit au WHERE au.owner.id = :userId")
     Optional<ApartmentUnit> findUnitByUserId(@Param("userId") Long userId);
 
-    // Optional safety check
+    
     boolean existsByUnitNumber(String unitNumber);
 }
