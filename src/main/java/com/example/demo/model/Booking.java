@@ -1,34 +1,22 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Table(name = "bookings")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long userId;        
     private String facilityName;
-    private String date;
-    private double amount;
-
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getFacilityName() { return facilityName; }
-    public void setFacilityName(String facilityName) { this.facilityName = facilityName; }
-
-    public String getDate() { return date; }
-    public void setDate(String date) { this.date = date; }
-
-    public double getAmount() { return amount; }
-    public void setAmount(double amount) { this.amount = amount; }
-
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    private String bookingDate;
+    private String status;
 }

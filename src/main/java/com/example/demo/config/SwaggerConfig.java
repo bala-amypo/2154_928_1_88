@@ -11,6 +11,11 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .addServersItem(new Server().url("https://9168.408procr.amypo.ai/"));
+                .addServersItem(
+                        new Server().url("https://9168.408procr.amypo.ai")
+                                .description("Live Server")
+                );
     }
 }
+
+grep -rl "com.example.demo.entity" src/main/java | xargs sed -i 's/com.example.demo.entity/com.example.demo.model/g'
