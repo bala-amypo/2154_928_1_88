@@ -6,6 +6,8 @@ import org.springframework.validation.annotation.Validated;
 import java.util.List;
 import com.example.demo.model.BookingLog;
 import com.example.demo.service.BookingLogService;
+import com.example.demo.security.JwtTokenProvider;
+
 
 @RestController
 @RequestMapping("/logs")

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import com.example.demo.model.Booking;
 import com.example.demo.service.BookingService;
+import com.example.demo.security.JwtTokenProvider;
+
 
 @RestController
 @RequestMapping("/bookings")
