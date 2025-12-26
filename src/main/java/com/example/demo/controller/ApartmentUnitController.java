@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import com.example.demo.model.ApartmentUnit;
 import com.example.demo.service.ApartmentUnitService;
+import com.example.demo.security.JwtTokenProvider;
+
 
 @RestController
 @RequestMapping("/units")
