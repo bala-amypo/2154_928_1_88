@@ -1,30 +1,36 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import com.example.demo.model.User;
+import com.example.demo.dto.*;
+import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
-import com.example.demo.dto.RegisterRequest;
+import org.springframework.security.authentication.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
-@Validated
+@RequestMapping("/auth")
 public class UserController {
 
-    private final UserService userService;
-    public UserController(UserService userService) { this.userService = userService; }
+    private final AuthenticationManager authManager;
+    private final JwtTokenProvider jwt;
+    private final UserService service;
 
-    @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody RegisterRequest req) {
-        User u = new User(null, req.getName(), req.getEmail(), req.getPassword(), "RESIDENT");
-        User saved = userService.register(u);
-        return ResponseEntity.ok(saved);
+    public UserController(AuthenticationManager authManager, JwtTokenProvider jwt, UserService service){
+        this.authManager = authManager;
+        this.jwt = jwt;
+        this.service = service;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
-        // Normally userService.getUserById
-        return ResponseEntity.ok(new User(id, "Test", "test@e.com", "p", "RESIDENT"));
+    @PostMapping("/register")
+    public String register(@RequestBody RegisterRequest req){
+        service.register(req);
+        return "User Registered Successfully";
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody LoginRequest req){
+        Authentication auth =
+                authManager.authenticate(new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword()));
+        return "{\"token\":\""+jwt.createToken(req.getUsername())+"\"}";
     }
 }

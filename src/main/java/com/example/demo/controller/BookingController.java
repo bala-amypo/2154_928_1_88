@@ -1,34 +1,22 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import java.util.List;
-import com.example.demo.model.Booking;
+import com.example.demo.entity.Booking;
 import com.example.demo.service.BookingService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/bookings")
-@Validated
 public class BookingController {
 
-    private final BookingService bookingService;
-    public BookingController(BookingService service) { this.bookingService = service; }
+    private final BookingService service;
 
-    @PostMapping("/{userId}/{facilityId}")
-    public ResponseEntity<Booking> createBooking(@PathVariable Long userId, @PathVariable Long facilityId, @RequestBody Booking b) {
-        Booking saved = bookingService.createBooking(userId, facilityId, b);
-        return ResponseEntity.ok(saved);
-    }
+    public BookingController(BookingService service){ this.service = service; }
 
-    @PostMapping("/cancel/{bookingId}")
-    public ResponseEntity<Booking> cancelBooking(@PathVariable Long bookingId) {
-        Booking cancelled = bookingService.cancelBooking(bookingId);
-        return ResponseEntity.ok(cancelled);
-    }
+    @PostMapping
+    public Booking save(@RequestBody Booking b){ return service.save(b); }
 
-    @GetMapping("/{bookingId}")
-    public ResponseEntity<Booking> getBooking(@PathVariable Long bookingId) {
-        return ResponseEntity.ok(bookingService.getBooking(bookingId));
-    }
+    @GetMapping
+    public List<Booking> all(){ return service.all(); }
 }
