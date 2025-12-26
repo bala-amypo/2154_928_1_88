@@ -13,10 +13,20 @@ public class Booking {
     private String status;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
-    // Getters and Setters
+    // Constructors
+    public Booking() {}
+
+    public Booking(User user, String status) {
+        this.user = user;
+        this.status = status;
+    }
+
+    // Getters & Setters
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }

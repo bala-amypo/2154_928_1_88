@@ -14,10 +14,20 @@ public class ApartmentUnit {
     private int floor;
 
     @ManyToOne
+    @JoinColumn(name = "owner_id")
     private User owner;
 
-    // Getters and Setters
+    // Constructors
+    public ApartmentUnit() {}
+
+    public ApartmentUnit(String unitNumber, int floor) {
+        this.unitNumber = unitNumber;
+        this.floor = floor;
+    }
+
+    // Getters & Setters
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getUnitNumber() { return unitNumber; }
     public void setUnitNumber(String unitNumber) { this.unitNumber = unitNumber; }
