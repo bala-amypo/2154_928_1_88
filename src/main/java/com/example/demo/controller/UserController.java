@@ -2,15 +2,18 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
+import com.example.demo.dto.LoginResponse;
 import com.example.demo.model.User;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
+
 import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
@@ -21,16 +24,19 @@ public class UserController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    // User registration
     @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
-        userService.register(request);
-        return ResponseEntity.ok("User registered successfully");
+    public ResponseEntity<User> register(@Valid @RequestBody RegisterRequest request) {
+        User registeredUser = userService.register(request);
+        return ResponseEntity.ok(registeredUser);
     }
 
+    // User login
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         User user = userService.login(request);
         String token = jwtTokenProvider.generateToken(user.getEmail());
-        return ResponseEntity.ok(token);
+        LoginResponse response = new LoginResponse(user.getId(), user.getEmail(), token);
+        return ResponseEntity.ok(response);
     }
 }
