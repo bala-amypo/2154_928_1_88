@@ -1,38 +1,33 @@
 package com.example.demo.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.example.demo.model.ApartmentUnit;
-import com.example.demo.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.example.demo.repository.ApartmentUnitRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.model.ApartmentUnit;
+import com.example.demo.model.User;
 
 @Service
-@Transactional
 public class ApartmentUnitServiceImpl implements ApartmentUnitService {
 
-    private final ApartmentUnitRepository apartmentUnitRepository;
-    private final UserRepository userRepository;
+    @Autowired
+    private ApartmentUnitRepository unitRepo;
 
-    public ApartmentUnitServiceImpl(ApartmentUnitRepository apartmentUnitRepository,
-                                    UserRepository userRepository) {
-        this.apartmentUnitRepository = apartmentUnitRepository;
-        this.userRepository = userRepository;
-    }
+    @Autowired
+    private UserRepository userRepo;
 
     @Override
     public ApartmentUnit assignUnitToUser(Long userId, ApartmentUnit unit) {
-        User user = userRepository.findById(userId)
+        User user = userRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        unit.setUser(user);
-        return apartmentUnitRepository.save(unit);
+        unit.setOwner(user); // assign owner
+        return unitRepo.save(unit);
     }
 
     @Override
     public ApartmentUnit getUnitByUser(Long userId) {
-        return apartmentUnitRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Unit not assigned"));
+        return unitRepo.findByOwnerId(userId)
+                .orElseThrow(() -> new RuntimeException("No unit assigned to this user"));
     }
 }
