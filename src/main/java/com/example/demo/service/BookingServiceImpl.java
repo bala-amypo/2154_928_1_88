@@ -1,23 +1,22 @@
 package com.example.demo.service;
 
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Booking;
 import com.example.demo.repository.BookingRepository;
 
+import java.util.List;
+
 @Service
 public class BookingServiceImpl implements BookingService {
 
-    private final BookingRepository bookingRepository;
-
-    public BookingServiceImpl(BookingRepository bookingRepository) {
-        this.bookingRepository = bookingRepository;
-    }
+    @Autowired
+    private BookingRepository bookingRepository;
 
     @Override
-    public Booking save(Booking booking) {
-        booking.setStatus("CONFIRMED");
+    public Booking saveBooking(Booking booking) {
+        booking.setStatus("Pending"); // ✅ assuming Booking has setStatus
         return bookingRepository.save(booking);
     }
 
@@ -26,10 +25,8 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.findAll();
     }
 
-    @Override
-    public Booking cancelBooking(Long id) {
-        Booking booking = bookingRepository.findById(id).orElseThrow();
-        booking.setStatus("CANCELLED");
+    public Booking updateBookingStatus(Booking booking, String status) {
+        booking.setStatus(status);
         return bookingRepository.save(booking);
     }
 }

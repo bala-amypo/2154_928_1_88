@@ -1,22 +1,26 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Booking;
-import com.example.demo.service.BookingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import com.example.demo.model.Booking;
+import com.example.demo.service.BookingService;
 
 @RestController
 @RequestMapping("/bookings")
 public class BookingController {
 
-    private final BookingService service;
-
-    public BookingController(BookingService service){ this.service = service; }
+    @Autowired
+    private BookingService service;
 
     @PostMapping
-    public Booking save(@RequestBody Booking b){ return service.save(b); }
+    public Booking createBooking(@RequestBody Booking booking) {
+        return service.saveBooking(booking);
+    }
 
     @GetMapping
-    public List<Booking> all(){ return service.all(); }
+    public List<Booking> getBookings() {
+        return service.getAllBookings(); // ✅ corrected
+    }
 }

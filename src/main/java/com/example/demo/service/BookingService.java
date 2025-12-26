@@ -4,7 +4,6 @@ import java.util.List;
 import com.example.demo.model.Booking;
 
 public interface BookingService {
-    Booking save(Booking booking);
+    Booking saveBooking(Booking booking);
     List<Booking> getAllBookings();
-    Booking cancelBooking(Long id);
 }
