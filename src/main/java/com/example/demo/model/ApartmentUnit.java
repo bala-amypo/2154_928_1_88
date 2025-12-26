@@ -11,24 +11,15 @@ public class ApartmentUnit {
     private Long id;
 
     private String unitNumber;
+    private int floor;
 
-    private Integer floor;
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    @OneToOne
-    private User owner;
+    public String getUnitNumber() { return unitNumber; }
+    public void setUnitNumber(String unitNumber) { this.unitNumber = unitNumber; }
 
-    public ApartmentUnit() {}
-
-    public ApartmentUnit(Long id, String unitNumber, Integer floor, User owner){
-        this.id = id;
-        this.unitNumber = unitNumber;
-        this.floor = floor;
-        this.owner = owner;
-    }
-
-    // getters & setters
-    public Long getId(){return id;} public void setId(Long id){this.id=id;}
-    public String getUnitNumber(){return unitNumber;} public void setUnitNumber(String u){this.unitNumber=u;}
-    public Integer getFloor(){return floor;} public void setFloor(Integer f){this.floor=f;}
-    public User getOwner(){return owner;} public void setOwner(User u){this.owner=u;}
+    public int getFloor() { return floor; }
+    public void setFloor(int floor) { this.floor = floor; }
 }
