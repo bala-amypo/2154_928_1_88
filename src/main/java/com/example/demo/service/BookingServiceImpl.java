@@ -1,66 +1,39 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
-import org.springframework.stereotype.Service;
-import com.example.demo.model.Booking;
-import com.example.demo.model.Facility;
-import com.example.demo.model.User;
+import com.example.demo.model.Booking; // ⬅️ FIX
 import com.example.demo.repository.BookingRepository;
-import com.example.demo.repository.FacilityRepository;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.service.BookingService;
-import com.example.demo.service.BookingLogService;
-import com.example.demo.exception.ConflictException;
-
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class BookingServiceImpl implements BookingService {
 
-    private final BookingRepository bookingRepo;
-    private final FacilityRepository facilityRepo;
-    private final UserRepository userRepo;
-    private final BookingLogService logService;
+    @Autowired
+    BookingRepository repo;
 
-    public BookingServiceImpl(BookingRepository bookingRepo,
-                              FacilityRepository facilityRepo,
-                              UserRepository userRepo,
-                              BookingLogService logService){
-        this.bookingRepo = bookingRepo;
-        this.facilityRepo = facilityRepo;
-        this.userRepo = userRepo;
-        this.logService = logService;
+    @Override
+    public Booking createBooking(Booking booking) {
+        booking.setStatus("CONFIRMED"); // ⬅️ match your model field
+        return repo.save(booking);
     }
 
     @Override
-    public Booking createBooking(Long userId, Long facilityId, Booking b){
-        Facility f = facilityRepo.findById(facilityId).orElseThrow();
-        User u = userRepo.findById(userId).orElseThrow();
+    public Booking cancelBooking(Long id) {
+        Booking booking = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not Found"));
 
-        List<Booking> conflicts = bookingRepo.findByFacilityAndStartTimeLessThanAndEndTimeGreaterThan(
-                f, b.getEndTime(), b.getStartTime());
-
-        if(!conflicts.isEmpty()) throw new ConflictException("Booking conflict");
-
-        b.setFacility(f);
-        b.setUser(u);
-        b.setStatus(Booking.STATUS_CONFIRMED);
-
-        Booking saved = bookingRepo.save(b);
-        logService.addLog(saved.getId(), "Booking created");
-        return saved;
+        booking.setStatus("CANCELLED");
+        return repo.save(booking);
     }
 
     @Override
-    public Booking cancelBooking(Long bookingId){
-        Booking b = bookingRepo.findById(bookingId).orElseThrow();
-        b.setStatus(Booking.STATUS_CANCELLED);
-        Booking saved = bookingRepo.save(b);
-        logService.addLog(saved.getId(), "Booking cancelled");
-        return saved;
+    public Booking getBooking(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not Found"));
     }
 
     @Override
-    public Booking getBooking(Long bookingId){
-        return bookingRepo.findById(bookingId).orElseThrow();
+    public List<Booking> getAllBookings() {
+        return repo.findAll();
     }
 }
