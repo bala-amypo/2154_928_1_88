@@ -1,13 +1,9 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import jakarta.validation.Valid;
-
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
+import java.util.List;
 import com.example.demo.model.Facility;
 import com.example.demo.service.FacilityService;
 
@@ -17,24 +13,17 @@ import com.example.demo.service.FacilityService;
 public class FacilityController {
 
     private final FacilityService facilityService;
-
-    public FacilityController(FacilityService facilityService) {
-        this.facilityService = facilityService;
-    }
+    public FacilityController(FacilityService service) { this.facilityService = service; }
 
     @PostMapping
-    public ResponseEntity<Facility> addFacility(
-            @Valid @RequestBody Facility facility) {
-
-        return ResponseEntity.ok(
-                facilityService.addFacility(facility)
-        );
+    public ResponseEntity<Facility> addFacility(@RequestBody Facility f) {
+        Facility saved = facilityService.addFacility(f);
+        return ResponseEntity.ok(saved);
     }
 
     @GetMapping
     public ResponseEntity<List<Facility>> getAllFacilities() {
-        return ResponseEntity.ok(
-                facilityService.getAllFacilities()
-        );
+        List<Facility> list = facilityService.getAllFacilities();
+        return ResponseEntity.ok(list);
     }
 }

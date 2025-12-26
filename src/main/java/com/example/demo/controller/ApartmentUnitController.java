@@ -1,12 +1,8 @@
 package com.example.demo.controller;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.model.ApartmentUnit;
 import com.example.demo.service.ApartmentUnitService;
 
@@ -16,27 +12,16 @@ import com.example.demo.service.ApartmentUnitService;
 public class ApartmentUnitController {
 
     private final ApartmentUnitService apartmentUnitService;
-
-    public ApartmentUnitController(ApartmentUnitService apartmentUnitService) {
-        this.apartmentUnitService = apartmentUnitService;
-    }
+    public ApartmentUnitController(ApartmentUnitService service) { this.apartmentUnitService = service; }
 
     @PostMapping("/assign/{userId}")
-    public ResponseEntity<ApartmentUnit> assignUnit(
-            @PathVariable @NotNull(message = "User ID is required") Long userId,
-            @Valid @RequestBody ApartmentUnit unit) {
-
-        return ResponseEntity.ok(
-                apartmentUnitService.assignUnitToUser(userId, unit)
-        );
+    public ResponseEntity<ApartmentUnit> assignUnit(@PathVariable Long userId, @RequestBody ApartmentUnit unit) {
+        ApartmentUnit saved = apartmentUnitService.assignUnitToUser(userId, unit);
+        return ResponseEntity.ok(saved);
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<ApartmentUnit> getUnitByUser(
-            @PathVariable @NotNull(message = "User ID is required") Long userId) {
-
-        return ResponseEntity.ok(
-                apartmentUnitService.getUnitByUser(userId)
-        );
+    public ResponseEntity<ApartmentUnit> getUnitByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(apartmentUnitService.getUnitByUser(userId));
     }
 }
