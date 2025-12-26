@@ -1,39 +1,35 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Booking; // ⬅️ FIX
-import com.example.demo.repository.BookingRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.model.Booking;
+import com.example.demo.repository.BookingRepository;
 
 @Service
 public class BookingServiceImpl implements BookingService {
 
-    @Autowired
-    BookingRepository repo;
+    private final BookingRepository bookingRepository;
+
+    public BookingServiceImpl(BookingRepository bookingRepository) {
+        this.bookingRepository = bookingRepository;
+    }
 
     @Override
-    public Booking createBooking(Booking booking) {
-        booking.setStatus("CONFIRMED"); // ⬅️ match your model field
-        return repo.save(booking);
+    public Booking save(Booking booking) {
+        booking.setStatus("CONFIRMED"); // default status
+        return bookingRepository.save(booking);
+    }
+
+    @Override
+    public List<Booking> all() {
+        return bookingRepository.findAll();
     }
 
     @Override
     public Booking cancelBooking(Long id) {
-        Booking booking = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not Found"));
-
+        Booking booking = bookingRepository.findById(id).orElseThrow();
         booking.setStatus("CANCELLED");
-        return repo.save(booking);
-    }
-
-    @Override
-    public Booking getBooking(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not Found"));
-    }
-
-    @Override
-    public List<Booking> getAllBookings() {
-        return repo.findAll();
+        return bookingRepository.save(booking);
     }
 }
