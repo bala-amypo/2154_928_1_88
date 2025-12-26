@@ -1,47 +1,34 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "bookings")
 public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Facility facility;
+    private String facilityName;
+    private String date;
+    private double amount;
 
     @ManyToOne
+    @JoinColumn(name="user_id")
     private User user;
 
-    private LocalDateTime startTime;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    private LocalDateTime endTime;
+    public String getFacilityName() { return facilityName; }
+    public void setFacilityName(String facilityName) { this.facilityName = facilityName; }
 
-    private String status = STATUS_CONFIRMED;
+    public String getDate() { return date; }
+    public void setDate(String date) { this.date = date; }
 
-    public static final String STATUS_CONFIRMED = "CONFIRMED";
-    public static final String STATUS_CANCELLED = "CANCELLED";
+    public double getAmount() { return amount; }
+    public void setAmount(double amount) { this.amount = amount; }
 
-    public Booking() {}
-
-    public Booking(Long id, Facility f, User u, LocalDateTime start, LocalDateTime end, String status){
-        this.id = id;
-        this.facility = f;
-        this.user = u;
-        this.startTime = start;
-        this.endTime = end;
-        this.status = status;
-    }
-
-    // getters & setters
-    public Long getId(){return id;} public void setId(Long id){this.id=id;}
-    public Facility getFacility(){return facility;} public void setFacility(Facility f){this.facility=f;}
-    public User getUser(){return user;} public void setUser(User u){this.user=u;}
-    public LocalDateTime getStartTime(){return startTime;} public void setStartTime(LocalDateTime s){this.startTime=s;}
-    public LocalDateTime getEndTime(){return endTime;} public void setEndTime(LocalDateTime e){this.endTime=e;}
-    public String getStatus(){return status;} public void setStatus(String s){this.status=s;}
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 }
