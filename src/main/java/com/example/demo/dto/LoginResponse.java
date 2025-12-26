@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 public class LoginResponse {
+
     private Long id;
     private String email;
     private String token;
@@ -11,7 +12,7 @@ public class LoginResponse {
         this.token = token;
     }
 
-    // Getters and setters
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

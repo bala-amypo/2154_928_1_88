@@ -8,7 +8,6 @@ import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
 
 import jakarta.validation.Valid;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

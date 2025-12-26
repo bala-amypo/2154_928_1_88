@@ -3,34 +3,39 @@ package com.example.demo.service;
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.User;
-import org.springframework.stereotype.Service;
+import com.example.demo.repository.UserRepository;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final Map<String, User> userDatabase = new HashMap<>();
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public User register(RegisterRequest request) {
         User user = new User();
-        user.setId((long) (userDatabase.size() + 1));
         user.setName(request.getName());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
-        user.setRole(request.getRole());  // <-- set role
-        userDatabase.put(user.getEmail(), user);
-        return user;
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(request.getRole());
+        return userRepository.save(user);
     }
 
     @Override
     public User login(LoginRequest request) {
-        User user = userDatabase.get(request.getEmail());
-        if (user != null && user.getPassword().equals(request.getPassword())) {
-            return user;
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid password");
         }
-        throw new RuntimeException("Invalid credentials");
+        return user;
     }
 }
