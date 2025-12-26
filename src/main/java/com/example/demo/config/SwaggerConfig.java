@@ -18,4 +18,4 @@ public class SwaggerConfig {
     }
 }
 
-grep -rl "com.example.demo.entity" src/main/java | xargs sed -i 's/com.example.demo.entity/com.example.demo.model/g'
+grep -rl "com.example.demo.model" src/main/java | xargs sed -i 's/com.example.demo.model/com.example.demo.model/g'
