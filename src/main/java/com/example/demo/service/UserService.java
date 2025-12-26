@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.User;
 
 public interface UserService {
-    User registerUser(User u);
-    boolean emailExists(String email);
+    User register(RegisterRequest request);  // <-- Add this
 }
