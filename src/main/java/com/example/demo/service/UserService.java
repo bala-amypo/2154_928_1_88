@@ -1,8 +1,12 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.RegisterRequest;
+import com.example.demo.dto.LoginRequest;
 import com.example.demo.model.User;
 
 public interface UserService {
-    User register(RegisterRequest request);  // <-- Add this
+
+    User register(RegisterRequest request);
+
+    User login(LoginRequest request); // <-- add this method
 }
