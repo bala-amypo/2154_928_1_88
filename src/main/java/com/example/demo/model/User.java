@@ -1,28 +1,40 @@
-package com.example.demo.model;
+package com.example.demo.controller;
 
-import jakarta.persistence.*;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
+import com.example.demo.dto.LoginResponse;
+import com.example.demo.model.User;
+import com.example.demo.security.JwtTokenProvider;
+import com.example.demo.service.UserService;
 
-@Entity
-public class User {
+import jakarta.validation.Valid;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-    private String email;
-    private String password;
-    private String role; // add this field
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public UserController(UserService userService, JwtTokenProvider jwtTokenProvider) {
+        this.userService = userService;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@Valid @RequestBody RegisterRequest request) {
+        User registeredUser = userService.register(request);
+        return ResponseEntity.ok(registeredUser);
+    }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        User user = userService.login(request);
+        String token = jwtTokenProvider.generateToken(user.getEmail(), user.getRole());
+        LoginResponse response = new LoginResponse(user.getId(), user.getEmail(), token);
+        return ResponseEntity.ok(response);
+    }
 }
