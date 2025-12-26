@@ -1,7 +1,13 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Value;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.SignatureException;
+
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -9,51 +15,50 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${app.jwtSecret:SecretKeyToGenJWTs}")
-    private String jwtSecret;
+    // Secret key for signing JWTs
+    private final String JWT_SECRET = "your-very-secure-secret-key";
 
-    @Value("${app.jwtExpirationInMs:86400000}")
-    private int jwtExpirationInMs;
+    // Token validity: 1 day (in milliseconds)
+    private final long JWT_EXPIRATION_MS = 86400000;
 
-    // Generate token
-    public String generateToken(String username) {
+    /**
+     * Generate a JWT token for the given username/email
+     */
+    public String createToken(String email) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
+        Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION_MS);
 
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(email)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
     }
 
-    // Get username from token
-    public String getUsernameFromJWT(String token) {
+    /**
+     * Get username/email from JWT token
+     */
+    public String getEmailFromToken(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
+                .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token)
                 .getBody();
 
         return claims.getSubject();
     }
 
-    // Validate token
-    public boolean validateToken(String authToken) {
+    /**
+     * Validate JWT token
+     */
+    public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token);
             return true;
-        } catch (SignatureException ex) {
-            System.out.println("Invalid JWT signature");
-        } catch (MalformedJwtException ex) {
-            System.out.println("Invalid JWT token");
-        } catch (ExpiredJwtException ex) {
-            System.out.println("Expired JWT token");
-        } catch (UnsupportedJwtException ex) {
-            System.out.println("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            System.out.println("JWT claims string is empty.");
+        } catch (SignatureException | MalformedJwtException | ExpiredJwtException |
+                 UnsupportedJwtException | IllegalArgumentException ex) {
+            // You can log the exception here if needed
+            return false;
         }
-        return false;
     }
 }
