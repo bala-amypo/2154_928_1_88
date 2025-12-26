@@ -1,11 +1,10 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Booking; // ⬅️ FIX
 import java.util.List;
+import com.example.demo.model.Booking;
 
 public interface BookingService {
-    Booking createBooking(Booking booking);
-    Booking cancelBooking(Long bookingId);
-    Booking getBooking(Long id);
+    Booking save(Booking booking);
     List<Booking> getAllBookings();
+    Booking cancelBooking(Long id);
 }

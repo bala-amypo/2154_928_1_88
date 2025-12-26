@@ -17,12 +17,12 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking save(Booking booking) {
-        booking.setStatus("CONFIRMED"); // default status
+        booking.setStatus("CONFIRMED");
         return bookingRepository.save(booking);
     }
 
     @Override
-    public List<Booking> all() {
+    public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
 
