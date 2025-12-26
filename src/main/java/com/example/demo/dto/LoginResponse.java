@@ -6,8 +6,7 @@ public class LoginResponse {
     private String email;
     private String token;
 
-    public LoginResponse() {
-    }
+    public LoginResponse() {}
 
     public LoginResponse(Long id, String email, String token) {
         this.id = id;
@@ -15,13 +14,27 @@ public class LoginResponse {
         this.token = token;
     }
 
-    // getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getToken() { return token; }
-    public void setToken(String token) { this.token = token; }
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }
