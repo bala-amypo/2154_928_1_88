@@ -1,87 +1,66 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.example.demo.exception.ConflictException;
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.Booking;
 import com.example.demo.model.Facility;
 import com.example.demo.model.User;
 import com.example.demo.repository.BookingRepository;
 import com.example.demo.repository.FacilityRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.BookingLogService;
 import com.example.demo.service.BookingService;
+import com.example.demo.service.BookingLogService;
+import com.example.demo.exception.ConflictException;
+
+import java.util.List;
 
 @Service
 public class BookingServiceImpl implements BookingService {
 
-    private final BookingRepository bookingRepository;
-    private final FacilityRepository facilityRepository;
-    private final UserRepository userRepository;
-    private final BookingLogService bookingLogService;
+    private final BookingRepository bookingRepo;
+    private final FacilityRepository facilityRepo;
+    private final UserRepository userRepo;
+    private final BookingLogService logService;
 
-    public BookingServiceImpl(BookingRepository bookingRepository,
-                              FacilityRepository facilityRepository,
-                              UserRepository userRepository,
-                              BookingLogService bookingLogService) {
-        this.bookingRepository = bookingRepository;
-        this.facilityRepository = facilityRepository;
-        this.userRepository = userRepository;
-        this.bookingLogService = bookingLogService;
+    public BookingServiceImpl(BookingRepository bookingRepo,
+                              FacilityRepository facilityRepo,
+                              UserRepository userRepo,
+                              BookingLogService logService){
+        this.bookingRepo = bookingRepo;
+        this.facilityRepo = facilityRepo;
+        this.userRepo = userRepo;
+        this.logService = logService;
     }
 
     @Override
-    @Transactional
-    public Booking createBooking(Long facilityId, Long userId, Booking booking) {
+    public Booking createBooking(Long userId, Long facilityId, Booking b){
+        Facility f = facilityRepo.findById(facilityId).orElseThrow();
+        User u = userRepo.findById(userId).orElseThrow();
 
-        Facility facility = facilityRepository.findById(facilityId)
-                .orElseThrow(() -> new BadRequestException("Facility not found"));
+        List<Booking> conflicts = bookingRepo.findByFacilityAndStartTimeLessThanAndEndTimeGreaterThan(
+                f, b.getEndTime(), b.getStartTime());
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BadRequestException("User not found"));
+        if(!conflicts.isEmpty()) throw new ConflictException("Booking conflict");
 
-        // HQL conflict check
-        List<Booking> conflicts =
-                bookingRepository.findConflictingBookings(
-                        facility,
-                        booking.getStartTime(),
-                        booking.getEndTime()
-                );
+        b.setFacility(f);
+        b.setUser(u);
+        b.setStatus(Booking.STATUS_CONFIRMED);
 
-        if (!conflicts.isEmpty()) {
-            throw new ConflictException("Booking conflict detected");
-        }
-
-        booking.setFacility(facility);
-        booking.setUser(user);
-
-        Booking saved = bookingRepository.save(booking);
-        bookingLogService.addLog(saved.getId(), "Booking created");
-
+        Booking saved = bookingRepo.save(b);
+        logService.addLog(saved.getId(), "Booking created");
         return saved;
     }
 
     @Override
-    @Transactional
-    public Booking cancelBooking(Long bookingId) {
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new BadRequestException("Booking not found"));
-
-        booking.setStatus("CANCELLED");
-        Booking updated = bookingRepository.save(booking);
-
-        bookingLogService.addLog(updated.getId(), "Booking cancelled");
-        return updated;
+    public Booking cancelBooking(Long bookingId){
+        Booking b = bookingRepo.findById(bookingId).orElseThrow();
+        b.setStatus(Booking.STATUS_CANCELLED);
+        Booking saved = bookingRepo.save(b);
+        logService.addLog(saved.getId(), "Booking cancelled");
+        return saved;
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Booking getBooking(Long bookingId) {
-        return bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new BadRequestException("Booking not found"));
+    public Booking getBooking(Long bookingId){
+        return bookingRepo.findById(bookingId).orElseThrow();
     }
 }
