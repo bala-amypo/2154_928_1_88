@@ -1,25 +1,17 @@
 package com.example.demo.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public class LoginRequest {
 
+    @Email
     @NotBlank
     private String email;
 
     @NotBlank
     private String password;
 
-    // Default constructor
-    public LoginRequest() {}
-
-    // Constructor with fields
-    public LoginRequest(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
-
-    // Getter and Setter
     public String getEmail() {
         return email;
     }

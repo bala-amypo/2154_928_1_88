@@ -5,9 +5,7 @@ import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.User;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
-
 import jakarta.validation.Valid;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,12 +29,8 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request) {
-        // Authenticate user
         User user = userService.login(request);
-
-        // Generate JWT token using updated method
         String token = jwtTokenProvider.generateToken(user.getEmail());
-
         return ResponseEntity.ok(token);
     }
 }
