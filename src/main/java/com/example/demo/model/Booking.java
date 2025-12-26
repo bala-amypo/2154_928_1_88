@@ -1,17 +1,10 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bookings")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Booking {
 
     @Id
@@ -19,37 +12,36 @@ public class Booking {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "facility_id", nullable = false)
     private Facility facility;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
 
-    private String status; 
+    private String status = STATUS_CONFIRMED;
 
-    @PrePersist
-    public void prePersist() {
-        if (status == null || status.isEmpty()) {
-            status = "CONFIRMED";
-        }
-        validateTime();
+    public static final String STATUS_CONFIRMED = "CONFIRMED";
+    public static final String STATUS_CANCELLED = "CANCELLED";
+
+    public Booking() {}
+
+    public Booking(Long id, Facility f, User u, LocalDateTime start, LocalDateTime end, String status){
+        this.id = id;
+        this.facility = f;
+        this.user = u;
+        this.startTime = start;
+        this.endTime = end;
+        this.status = status;
     }
 
-    @PreUpdate
-    public void preUpdate() {
-        validateTime();
-    }
-
-    private void validateTime() {
-        if (startTime != null && endTime != null) {
-            if (!endTime.isAfter(startTime)) {
-                throw new IllegalArgumentException("End time must be after start time");
-            }
-        }
-    }
+    // getters & setters
+    public Long getId(){return id;} public void setId(Long id){this.id=id;}
+    public Facility getFacility(){return facility;} public void setFacility(Facility f){this.facility=f;}
+    public User getUser(){return user;} public void setUser(User u){this.user=u;}
+    public LocalDateTime getStartTime(){return startTime;} public void setStartTime(LocalDateTime s){this.startTime=s;}
+    public LocalDateTime getEndTime(){return endTime;} public void setEndTime(LocalDateTime e){this.endTime=e;}
+    public String getStatus(){return status;} public void setStatus(String s){this.status=s;}
 }
