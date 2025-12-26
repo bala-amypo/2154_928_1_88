@@ -1,41 +1,68 @@
-package com.example.demo.controller;
+package com.example.demo.model;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.dto.LoginResponse;
-import com.example.demo.model.User;
-import com.example.demo.security.JwtTokenProvider;
-import com.example.demo.service.UserService;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
-import jakarta.validation.Valid;
+@Entity
+@Table(name = "users")
+public class User {
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-@RestController
-@RequestMapping("/api/users")
-public class UserController {
+    @Email
+    @NotBlank
+    @Column(unique = true)
+    private String email;
 
-    private final UserService userService;
-    private final JwtTokenProvider jwtTokenProvider;
+    @NotBlank
+    private String password;
 
-    public UserController(UserService userService, JwtTokenProvider jwtTokenProvider) {
-        this.userService = userService;
-        this.jwtTokenProvider = jwtTokenProvider;
+    @NotBlank
+    private String role;
+
+    // Constructors
+    public User() {
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<User> register(@Valid @RequestBody RegisterRequest request) {
-        User registeredUser = userService.register(request);
-        return ResponseEntity.ok(registeredUser);
+    public User(String email, String password, String role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        User user = userService.login(request);
-        String token = jwtTokenProvider.generateToken(user.getEmail(), user.getRole());
-        LoginResponse response = new LoginResponse(user.getId(), user.getEmail(), token);
-        return ResponseEntity.ok(response);
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
-
