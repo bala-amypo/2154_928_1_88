@@ -11,26 +11,26 @@ import java.util.Map;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private Map<String, User> users = new HashMap<>();
-    private Long userIdCounter = 1L;
+    private final Map<String, User> userDatabase = new HashMap<>();
 
     @Override
     public User register(RegisterRequest request) {
         User user = new User();
-        user.setId(userIdCounter++);
+        user.setId((long) (userDatabase.size() + 1));
         user.setName(request.getName());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword()); // in production, hash password!
-        users.put(user.getEmail(), user);
+        user.setPassword(request.getPassword());
+        user.setRole(request.getRole());  // <-- set role
+        userDatabase.put(user.getEmail(), user);
         return user;
     }
 
     @Override
     public User login(LoginRequest request) {
-        User user = users.get(request.getEmail());
+        User user = userDatabase.get(request.getEmail());
         if (user != null && user.getPassword().equals(request.getPassword())) {
             return user;
         }
-        throw new RuntimeException("Invalid email or password");
+        throw new RuntimeException("Invalid credentials");
     }
 }

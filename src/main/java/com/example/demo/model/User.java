@@ -6,6 +6,7 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private String role;  // <-- added role field
 
     public Long getId() {
         return id;
@@ -37,5 +38,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {   // <-- getter for role
+        return role;
+    }
+
+    public void setRole(String role) {  // <-- setter for role
+        this.role = role;
     }
 }

@@ -15,6 +15,9 @@ public class RegisterRequest {
     @NotBlank
     private String password;
 
+    @NotBlank
+    private String role;  // <-- added role
+
     public String getName() {
         return name;
     }
@@ -37,5 +40,13 @@ public class RegisterRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {  // <-- getter
+        return role;
+    }
+
+    public void setRole(String role) {  // <-- setter
+        this.role = role;
     }
 }

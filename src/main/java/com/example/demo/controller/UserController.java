@@ -8,7 +8,6 @@ import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
 
 import jakarta.validation.Valid;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,18 +23,16 @@ public class UserController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // User registration
     @PostMapping("/register")
     public ResponseEntity<User> register(@Valid @RequestBody RegisterRequest request) {
         User registeredUser = userService.register(request);
         return ResponseEntity.ok(registeredUser);
     }
 
-    // User login
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         User user = userService.login(request);
-        String token = jwtTokenProvider.generateToken(user.getEmail());
+        String token = jwtTokenProvider.generateToken(user.getEmail(), user.getRole()); // <-- pass role
         LoginResponse response = new LoginResponse(user.getId(), user.getEmail(), token);
         return ResponseEntity.ok(response);
     }

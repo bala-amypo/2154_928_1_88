@@ -9,18 +9,16 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private final String JWT_SECRET = "mySecretKey12345"; // replace with your secret
-    private final long JWT_EXPIRATION_MS = 86400000; // 24 hours
+    private final String jwtSecret = "SecretKey12345";
+    private final long jwtExpirationMs = 86400000; // 1 day
 
-    public String generateToken(String email) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION_MS);
-
+    public String generateToken(String email, String role) {
         return Jwts.builder()
                 .setSubject(email)
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
+                .claim("role", role)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 }
