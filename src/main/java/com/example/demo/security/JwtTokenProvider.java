@@ -9,18 +9,18 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private final String jwtSecret = "mySecretKey"; // Use environment variable in production
-    private final long jwtExpirationInMs = 3600000; // 1 hour
+    private final String JWT_SECRET = "mySecretKey12345"; // replace with your secret
+    private final long JWT_EXPIRATION_MS = 86400000; // 24 hours
 
     public String generateToken(String email) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
+        Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION_MS);
 
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
     }
 }

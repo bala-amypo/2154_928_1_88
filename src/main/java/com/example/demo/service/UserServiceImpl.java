@@ -3,36 +3,33 @@ package com.example.demo.service;
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private Map<String, User> users = new HashMap<>();
+    private Long userIdCounter = 1L;
 
     @Override
-    public void register(RegisterRequest request) {
+    public User register(RegisterRequest request) {
         User user = new User();
+        user.setId(userIdCounter++);
+        user.setName(request.getName());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword()); // Encrypt in production
-        userRepository.save(user);
+        user.setPassword(request.getPassword()); // in production, hash password!
+        users.put(user.getEmail(), user);
+        return user;
     }
 
     @Override
     public User login(LoginRequest request) {
-        Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            if (user.getPassword().equals(request.getPassword())) { // Compare hashed in production
-                return user;
-            }
+        User user = users.get(request.getEmail());
+        if (user != null && user.getPassword().equals(request.getPassword())) {
+            return user;
         }
         throw new RuntimeException("Invalid email or password");
     }
