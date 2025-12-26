@@ -16,14 +16,10 @@ public class CustomUserDetails implements UserDetails {
         this.user = user;
     }
 
-    public User getUser() {
-        return user;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // You can modify this if your User has roles
-        return Collections.singletonList(new SimpleGrantedAuthority("USER"));
+        // Example: assign ROLE_USER to all users
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
@@ -33,7 +29,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return user.getEmail(); // using email as username
     }
 
     @Override
@@ -54,5 +50,10 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    // Optional getter for the User object
+    public User getUser() {
+        return user;
     }
 }
