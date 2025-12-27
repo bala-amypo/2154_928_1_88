@@ -7,7 +7,6 @@ import lombok.*;
 @Table(name = "apartment_units")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class ApartmentUnit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +19,7 @@ public class ApartmentUnit {
     @JoinColumn(name = "owner_id")
     private User owner;
     
-    // Constructor for test compatibility
+    // Constructor for test compatibility - REMOVE @AllArgsConstructor
     public ApartmentUnit(Long id, String unitNumber, int floor, User owner) {
         this.id = id;
         this.unitNumber = unitNumber;
