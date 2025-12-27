@@ -7,7 +7,6 @@ import lombok.*;
 @Table(name = "facilities")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Facility {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +17,7 @@ public class Facility {
     private String openTime;
     private String closeTime;
     
-    // Constructor for test compatibility
+    // Constructor for test compatibility - REMOVE @AllArgsConstructor
     public Facility(Long id, String name, String description, String openTime, String closeTime) {
         this.id = id;
         this.name = name;

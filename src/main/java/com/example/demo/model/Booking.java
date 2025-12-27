@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Table(name = "bookings")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Booking {
     public static final String STATUS_CONFIRMED = "CONFIRMED";
     public static final String STATUS_CANCELLED = "CANCELLED";
@@ -29,7 +28,7 @@ public class Booking {
     private LocalDateTime endTime;
     private String status = STATUS_CONFIRMED;
     
-    // Constructor for test compatibility
+    // Constructor for test compatibility - REMOVE @AllArgsConstructor
     public Booking(Long id, Facility facility, User user, LocalDateTime startTime, LocalDateTime endTime, String status) {
         this.id = id;
         this.facility = facility;

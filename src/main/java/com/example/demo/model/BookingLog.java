@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Table(name = "booking_logs")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class BookingLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +25,7 @@ public class BookingLog {
         loggedAt = LocalDateTime.now();
     }
     
-    // Constructor for test compatibility
+    // Constructor for test compatibility - REMOVE @AllArgsConstructor
     public BookingLog(Long id, Booking booking, String logMessage, LocalDateTime loggedAt) {
         this.id = id;
         this.booking = booking;
