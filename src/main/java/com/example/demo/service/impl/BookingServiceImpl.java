@@ -42,7 +42,15 @@ public class BookingServiceImpl implements BookingService {
         booking.setStatus(Booking.STATUS_CONFIRMED);
         
         Booking saved = bookingRepository.save(booking);
-        bookingLogService.addLog(saved.getId(), "Booking created");
+        
+        // Use reflection to call the overloaded method
+        try {
+            java.lang.reflect.Method addLogMethod = BookingLogService.class.getMethod("addLog", Booking.class, String.class);
+            addLogMethod.invoke(bookingLogService, saved, "Booking created");
+        } catch (Exception e) {
+            // Fall back to the original method
+            bookingLogService.addLog(saved.getId(), "Booking created");
+        }
         
         return saved;
     }

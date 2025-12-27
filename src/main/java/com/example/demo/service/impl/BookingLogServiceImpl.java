@@ -28,6 +28,14 @@ public class BookingLogServiceImpl implements BookingLogService {
         return bookingLogRepository.save(log);
     }
     
+    // Add this method to handle creating log with Booking object directly
+    public BookingLog addLog(Booking booking, String message) {
+        BookingLog log = new BookingLog();
+        log.setBooking(booking);
+        log.setLogMessage(message);
+        return bookingLogRepository.save(log);
+    }
+    
     @Override
     public List<BookingLog> getLogsByBooking(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
