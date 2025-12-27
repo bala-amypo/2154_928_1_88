@@ -34,8 +34,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import java.time.LocalDateTime;
 
 
-// Comment out the listener temporarily to avoid compilation issues
-// @Listeners(TestResultListener.class)
+@Listeners(TestResultListener.class)
 public class ApartmentFacilityBookingSystemTest {
 
     @Mock private UserRepository userRepository;
@@ -74,12 +73,8 @@ public class ApartmentFacilityBookingSystemTest {
         SimpleHelloServlet s = new SimpleHelloServlet();
         MockHttpServletRequest rq = new MockHttpServletRequest("GET","/hello-servlet");
         MockHttpServletResponse rs = new MockHttpServletResponse();
-        
-        // Create a mock servlet response - just check that servlet can be instantiated
-        // Since doGet is protected, we'll test the servlet indirectly
-        Assert.assertNotNull(s);
-        // Test that getServletInfo works
-        Assert.assertTrue(s.getServletInfo().contains("SimpleHelloServlet"));
+        s.doGet(rq, rs);
+        Assert.assertEquals(rs.getContentAsString(), "Hello from Simple Servlet");
     }
 
     @Test(groups="servlet", priority=2)
@@ -87,17 +82,17 @@ public class ApartmentFacilityBookingSystemTest {
         SimpleHelloServlet s = new SimpleHelloServlet();
         MockHttpServletRequest rq = new MockHttpServletRequest("GET","/hello-servlet");
         MockHttpServletResponse rs = new MockHttpServletResponse();
-        
-        // Test servlet initialization
-        Assert.assertNotNull(s);
-        // Check servlet info
-        Assert.assertNotNull(s.getServletInfo());
+        s.doGet(rq, rs);
+        Assert.assertEquals(rs.getStatus(), 200);
     }
 
     @Test(groups="servlet", priority=3)
-    public void t3_servletContentType() {
+    public void t3_servletContentType() throws Exception {
         SimpleHelloServlet s = new SimpleHelloServlet();
-        Assert.assertNotNull(s);
+        MockHttpServletRequest rq = new MockHttpServletRequest("GET","/hello-servlet");
+        MockHttpServletResponse rs = new MockHttpServletResponse();
+        s.doGet(rq, rs);
+        Assert.assertEquals(rs.getContentType(), "text/plain");
     }
 
     @Test(groups="servlet", priority=4)
@@ -107,14 +102,14 @@ public class ApartmentFacilityBookingSystemTest {
     }
 
     @Test(groups="servlet", priority=5)
-    public void t5_servletMultipleCalls() {
-        SimpleHelloServlet s1 = new SimpleHelloServlet();
-        SimpleHelloServlet s2 = new SimpleHelloServlet();
-        SimpleHelloServlet s3 = new SimpleHelloServlet();
-        
-        Assert.assertNotNull(s1);
-        Assert.assertNotNull(s2);
-        Assert.assertNotNull(s3);
+    public void t5_servletMultipleCalls() throws Exception {
+        SimpleHelloServlet s = new SimpleHelloServlet();
+        for(int i = 0; i < 3; i++) {
+            MockHttpServletRequest rq = new MockHttpServletRequest("GET","/hello-servlet");
+            MockHttpServletResponse rs = new MockHttpServletResponse();
+            s.doGet(rq, rs);
+            Assert.assertEquals(rs.getContentAsString(), "Hello from Simple Servlet");
+        }
     }
 
     @Test(groups="servlet", priority=6)
@@ -128,10 +123,12 @@ public class ApartmentFacilityBookingSystemTest {
     }
 
     @Test(groups="servlet", priority=8)
-    public void t8_servletNoExceptionOnPost() {
+    public void t8_servletNoExceptionOnPost() throws Exception {
         SimpleHelloServlet s = new SimpleHelloServlet();
-        // Just test that servlet can be created without exception
-        Assert.assertNotNull(s);
+        MockHttpServletRequest rq = new MockHttpServletRequest("POST","/hello-servlet");
+        MockHttpServletResponse rs = new MockHttpServletResponse();
+        s.service(rq, rs);
+        Assert.assertTrue(rs.getStatus()==200 || rs.getStatus()==405);
     }
 
     // ------------------------------- 2) CRUD TESTS -------------------------------
@@ -296,9 +293,7 @@ public class ApartmentFacilityBookingSystemTest {
 
     @Test(groups="hibernate", priority=27)
     public void t27_bookingLogTimestamp() {
-        BookingLog log = new BookingLog();
-        // Set timestamp directly instead of calling protected method
-        log.setLoggedAt(LocalDateTime.now());
+        BookingLog log = new BookingLog(); log.onCreate();
         Assert.assertNotNull(log.getLoggedAt());
     }
 
