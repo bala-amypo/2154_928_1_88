@@ -12,7 +12,7 @@ public class SimpleHelloServlet extends HttpServlet {
         response.setContentType("text/plain");
         response.setStatus(200);
         PrintWriter out = response.getWriter();
-        out.println("Hello from Simple Servlet");
+        out.print("Hello from Simple Servlet"); // Use print() instead of println()
         out.close();
     }
     
