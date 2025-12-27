@@ -73,16 +73,8 @@ public class ApartmentFacilityBookingSystemTest {
         SimpleHelloServlet s = new SimpleHelloServlet();
         MockHttpServletRequest rq = new MockHttpServletRequest("GET","/hello-servlet");
         MockHttpServletResponse rs = new MockHttpServletResponse();
-        
-        // Use reflection to access protected method
-        java.lang.reflect.Method doGetMethod = SimpleHelloServlet.class.getDeclaredMethod(
-            "doGet", jakarta.servlet.http.HttpServletRequest.class, jakarta.servlet.http.HttpServletResponse.class);
-        doGetMethod.setAccessible(true);
-        doGetMethod.invoke(s, rq, rs);
-        
-        // Trim the response to handle any trailing newlines
-        String response = rs.getContentAsString().trim();
-        Assert.assertEquals(response, "Hello from Simple Servlet");
+        s.doGet(rq, rs);
+        Assert.assertEquals(rs.getContentAsString(), "Hello from Simple Servlet");
     }
 
     @Test(groups="servlet", priority=2)
@@ -90,12 +82,7 @@ public class ApartmentFacilityBookingSystemTest {
         SimpleHelloServlet s = new SimpleHelloServlet();
         MockHttpServletRequest rq = new MockHttpServletRequest("GET","/hello-servlet");
         MockHttpServletResponse rs = new MockHttpServletResponse();
-        
-        java.lang.reflect.Method doGetMethod = SimpleHelloServlet.class.getDeclaredMethod(
-            "doGet", jakarta.servlet.http.HttpServletRequest.class, jakarta.servlet.http.HttpServletResponse.class);
-        doGetMethod.setAccessible(true);
-        doGetMethod.invoke(s, rq, rs);
-        
+        s.doGet(rq, rs);
         Assert.assertEquals(rs.getStatus(), 200);
     }
 
@@ -104,12 +91,7 @@ public class ApartmentFacilityBookingSystemTest {
         SimpleHelloServlet s = new SimpleHelloServlet();
         MockHttpServletRequest rq = new MockHttpServletRequest("GET","/hello-servlet");
         MockHttpServletResponse rs = new MockHttpServletResponse();
-        
-        java.lang.reflect.Method doGetMethod = SimpleHelloServlet.class.getDeclaredMethod(
-            "doGet", jakarta.servlet.http.HttpServletRequest.class, jakarta.servlet.http.HttpServletResponse.class);
-        doGetMethod.setAccessible(true);
-        doGetMethod.invoke(s, rq, rs);
-        
+        s.doGet(rq, rs);
         Assert.assertEquals(rs.getContentType(), "text/plain");
     }
 
@@ -125,15 +107,8 @@ public class ApartmentFacilityBookingSystemTest {
         for(int i = 0; i < 3; i++) {
             MockHttpServletRequest rq = new MockHttpServletRequest("GET","/hello-servlet");
             MockHttpServletResponse rs = new MockHttpServletResponse();
-            
-            java.lang.reflect.Method doGetMethod = SimpleHelloServlet.class.getDeclaredMethod(
-                "doGet", jakarta.servlet.http.HttpServletRequest.class, jakarta.servlet.http.HttpServletResponse.class);
-            doGetMethod.setAccessible(true);
-            doGetMethod.invoke(s, rq, rs);
-            
-            // Trim the response to handle any trailing newlines
-            String response = rs.getContentAsString().trim();
-            Assert.assertEquals(response, "Hello from Simple Servlet");
+            s.doGet(rq, rs);
+            Assert.assertEquals(rs.getContentAsString(), "Hello from Simple Servlet");
         }
     }
 
@@ -152,21 +127,8 @@ public class ApartmentFacilityBookingSystemTest {
         SimpleHelloServlet s = new SimpleHelloServlet();
         MockHttpServletRequest rq = new MockHttpServletRequest("POST","/hello-servlet");
         MockHttpServletResponse rs = new MockHttpServletResponse();
-        
-        // Try to call doPost method
-        try {
-            java.lang.reflect.Method doPostMethod = SimpleHelloServlet.class.getDeclaredMethod(
-                "doPost", jakarta.servlet.http.HttpServletRequest.class, jakarta.servlet.http.HttpServletResponse.class);
-            doPostMethod.setAccessible(true);
-            doPostMethod.invoke(s, rq, rs);
-        } catch (NoSuchMethodException e) {
-            // If doPost doesn't exist, the servlet will handle it
-            // Just check that no exception is thrown
-            Assert.assertTrue(true);
-        }
-        
-        // The servlet might return 200 or 405 (Method Not Allowed)
-        Assert.assertTrue(rs.getStatus() == 200 || rs.getStatus() == 405);
+        s.service(rq, rs);
+        Assert.assertTrue(rs.getStatus()==200 || rs.getStatus()==405);
     }
 
     // ------------------------------- 2) CRUD TESTS -------------------------------
@@ -249,12 +211,7 @@ public class ApartmentFacilityBookingSystemTest {
             Booking x = inv.getArgument(0); x.setId(100L); return x;
         });
 
-        // Mock the booking log service to handle the saved booking
         when(bookingLogRepository.save(any(BookingLog.class))).thenAnswer(inv -> inv.getArgument(0));
-        
-        // Mock findById to return the saved booking
-        Booking savedBooking = new Booking(100L, fac, u, s, e, Booking.STATUS_CONFIRMED);
-        when(bookingRepository.findById(100L)).thenReturn(Optional.of(savedBooking));
 
         Booking created = bookingService.createBooking(1L,1L,b);
 
@@ -336,16 +293,7 @@ public class ApartmentFacilityBookingSystemTest {
 
     @Test(groups="hibernate", priority=27)
     public void t27_bookingLogTimestamp() {
-        BookingLog log = new BookingLog();
-        // Use reflection to call protected onCreate method
-        try {
-            java.lang.reflect.Method onCreateMethod = BookingLog.class.getDeclaredMethod("onCreate");
-            onCreateMethod.setAccessible(true);
-            onCreateMethod.invoke(log);
-        } catch (Exception e) {
-            // If reflection fails, just set the time directly
-            log.setLoggedAt(LocalDateTime.now());
-        }
+        BookingLog log = new BookingLog(); log.onCreate();
         Assert.assertNotNull(log.getLoggedAt());
     }
 
