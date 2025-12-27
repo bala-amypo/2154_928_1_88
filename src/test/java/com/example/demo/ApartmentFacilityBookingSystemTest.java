@@ -73,7 +73,13 @@ public class ApartmentFacilityBookingSystemTest {
         SimpleHelloServlet s = new SimpleHelloServlet();
         MockHttpServletRequest rq = new MockHttpServletRequest("GET","/hello-servlet");
         MockHttpServletResponse rs = new MockHttpServletResponse();
-        s.doGet(rq, rs);
+        
+        // Use reflection to access protected method
+        java.lang.reflect.Method doGetMethod = SimpleHelloServlet.class.getDeclaredMethod(
+            "doGet", jakarta.servlet.http.HttpServletRequest.class, jakarta.servlet.http.HttpServletResponse.class);
+        doGetMethod.setAccessible(true);
+        doGetMethod.invoke(s, rq, rs);
+        
         Assert.assertEquals(rs.getContentAsString(), "Hello from Simple Servlet");
     }
 
@@ -82,7 +88,12 @@ public class ApartmentFacilityBookingSystemTest {
         SimpleHelloServlet s = new SimpleHelloServlet();
         MockHttpServletRequest rq = new MockHttpServletRequest("GET","/hello-servlet");
         MockHttpServletResponse rs = new MockHttpServletResponse();
-        s.doGet(rq, rs);
+        
+        java.lang.reflect.Method doGetMethod = SimpleHelloServlet.class.getDeclaredMethod(
+            "doGet", jakarta.servlet.http.HttpServletRequest.class, jakarta.servlet.http.HttpServletResponse.class);
+        doGetMethod.setAccessible(true);
+        doGetMethod.invoke(s, rq, rs);
+        
         Assert.assertEquals(rs.getStatus(), 200);
     }
 
@@ -91,7 +102,12 @@ public class ApartmentFacilityBookingSystemTest {
         SimpleHelloServlet s = new SimpleHelloServlet();
         MockHttpServletRequest rq = new MockHttpServletRequest("GET","/hello-servlet");
         MockHttpServletResponse rs = new MockHttpServletResponse();
-        s.doGet(rq, rs);
+        
+        java.lang.reflect.Method doGetMethod = SimpleHelloServlet.class.getDeclaredMethod(
+            "doGet", jakarta.servlet.http.HttpServletRequest.class, jakarta.servlet.http.HttpServletResponse.class);
+        doGetMethod.setAccessible(true);
+        doGetMethod.invoke(s, rq, rs);
+        
         Assert.assertEquals(rs.getContentType(), "text/plain");
     }
 
@@ -107,7 +123,12 @@ public class ApartmentFacilityBookingSystemTest {
         for(int i = 0; i < 3; i++) {
             MockHttpServletRequest rq = new MockHttpServletRequest("GET","/hello-servlet");
             MockHttpServletResponse rs = new MockHttpServletResponse();
-            s.doGet(rq, rs);
+            
+            java.lang.reflect.Method doGetMethod = SimpleHelloServlet.class.getDeclaredMethod(
+                "doGet", jakarta.servlet.http.HttpServletRequest.class, jakarta.servlet.http.HttpServletResponse.class);
+            doGetMethod.setAccessible(true);
+            doGetMethod.invoke(s, rq, rs);
+            
             Assert.assertEquals(rs.getContentAsString(), "Hello from Simple Servlet");
         }
     }
@@ -127,7 +148,13 @@ public class ApartmentFacilityBookingSystemTest {
         SimpleHelloServlet s = new SimpleHelloServlet();
         MockHttpServletRequest rq = new MockHttpServletRequest("POST","/hello-servlet");
         MockHttpServletResponse rs = new MockHttpServletResponse();
-        s.service(rq, rs);
+        
+        // Try to call service method using reflection
+        java.lang.reflect.Method serviceMethod = SimpleHelloServlet.class.getDeclaredMethod(
+            "service", jakarta.servlet.http.HttpServletRequest.class, jakarta.servlet.http.HttpServletResponse.class);
+        serviceMethod.setAccessible(true);
+        serviceMethod.invoke(s, rq, rs);
+        
         Assert.assertTrue(rs.getStatus()==200 || rs.getStatus()==405);
     }
 
@@ -143,6 +170,7 @@ public class ApartmentFacilityBookingSystemTest {
             User u = inv.getArgument(0); u.setId(1L); return u;
         });
 
+        // Create User object using constructor
         User u = new User(null, "John","john@example.com","p","RESIDENT");
         User saved = userService.register(u);
 
@@ -293,7 +321,15 @@ public class ApartmentFacilityBookingSystemTest {
 
     @Test(groups="hibernate", priority=27)
     public void t27_bookingLogTimestamp() {
-        BookingLog log = new BookingLog(); log.onCreate();
+        BookingLog log = new BookingLog();
+        // Use reflection to call protected onCreate method
+        try {
+            java.lang.reflect.Method onCreateMethod = BookingLog.class.getDeclaredMethod("onCreate");
+            onCreateMethod.setAccessible(true);
+            onCreateMethod.invoke(log);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Assert.assertNotNull(log.getLoggedAt());
     }
 
