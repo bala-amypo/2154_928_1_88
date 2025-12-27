@@ -4,7 +4,6 @@
          
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- ❗This fixes all missing versions -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -82,7 +81,7 @@
 
         <!-- ==================== TEST DEPENDENCIES ==================== -->
         
-        <!-- TestNG - MUST come BEFORE JUnit dependencies -->
+        <!-- TestNG -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
@@ -94,12 +93,6 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>${mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-inline</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
@@ -142,12 +135,10 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- TestNG listeners and other utilities -->
+        <!-- Spring Test -->
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${testng.version}</version>
-            <classifier>jdk15</classifier>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -184,59 +175,26 @@
                 </configuration>
             </plugin>
             
-            <!-- CRITICAL: Surefire Plugin configured for TestNG -->
+            <!-- Surefire Plugin for TestNG -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
-                    <!-- Force use of TestNG -->
-                    <useSystemClassLoader>false</useSystemClassLoader>
-                    <useUnlimitedThreads>true</useUnlimitedThreads>
-                    <parallel>methods</parallel>
-                    <threadCount>10</threadCount>
-                    
-                    <!-- TestNG configuration -->
+                    <!-- Use TestNG -->
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
-                    
-                    <!-- Include all TestNG tests -->
                     <includes>
                         <include>**/*Test.java</include>
                         <include>**/*Tests.java</include>
                     </includes>
-                    
-                    <!-- Exclude JUnit tests -->
-                    <excludes>
-                        <exclude>**/*IT.java</exclude>
-                        <exclude>**/*IntegrationTest.java</exclude>
-                    </excludes>
-                    
                     <systemPropertyVariables>
                         <testng.dtd.http>true</testng.dtd.http>
                     </systemPropertyVariables>
-                    
-                    <!-- Disable JUnit 5 -->
-                    <junit>false</junit>
-                    <junitArtifactName>none</junitArtifactName>
-                    
-                    <!-- Force TestNG provider -->
-                    <provider>org.apache.maven.surefire.testng.TestNGProvider</provider>
+                    <!-- Disable default JUnit detection -->
+                    <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
-                <dependencies>
-                    <!-- Ensure TestNG is used -->
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-testng</artifactId>
-                        <version>${maven-surefire-plugin.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.testng</groupId>
-                        <artifactId>testng</artifactId>
-                        <version>${testng.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             
             <!-- Clean Plugin -->

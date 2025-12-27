@@ -1,12 +1,8 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Apartment Facility Booking System Test Suite" verbose="1">
-    <listeners>
-        <listener class-name="com.example.demo.TestResultListener" />
-    </listeners>
-    
+<suite name="Apartment Test Suite" verbose="1">
     <test name="All Tests">
         <classes>
-            <class name="com.example.demo.ApartmentFacilityBookingSystemTest" />
+            <class name="com.example.demo.ApartmentFacilityBookingSystemTest"/>
         </classes>
     </test>
 </suite>
