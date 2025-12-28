@@ -26,6 +26,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jjwt.version>0.11.5</jjwt.version>
         <testng.version>7.8.0</testng.version>
+        <lombok.version>1.18.30</lombok.version>
     </properties>
     
     <dependencies>
@@ -78,8 +79,22 @@
             <scope>runtime</scope>
         </dependency>
         
+        <!-- Lombok - Make sure it's NOT optional -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <!-- Remove optional=true -->
+        </dependency>
+        
+        <!-- Jakarta Servlet API -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
         <!-- Testing Dependencies -->
-        <!-- Exclude JUnit from Spring Boot Starter Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -139,14 +154,26 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- Don't exclude lombok -->
+                </configuration>
             </plugin>
             
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <annotationProcessorPaths>
+                        <!-- Lombok annotation processor -->
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             
@@ -158,10 +185,6 @@
                     <!-- Force TestNG instead of JUnit -->
                     <testNGArtifactName>org.testng:testng:${testng.version}</testNGArtifactName>
                     <useSystemClassLoader>false</useSystemClassLoader>
-                    <!-- Include your test class -->
-                    <includes>
-                        <include>**/ApartmentFacilityBookingSystemTest.java</include>
-                    </includes>
                 </configuration>
             </plugin>
         </plugins>
