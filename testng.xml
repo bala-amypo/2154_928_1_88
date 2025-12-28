@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Apartment Facility Booking System Test Suite" parallel="false">
-    <test name="All Tests" verbose="2">
+<suite name="Apartment Facility Booking System Test Suite" verbose="2">
+    <test name="All Tests">
         <classes>
             <class name="com.example.demo.ApartmentFacilityBookingSystemTest"/>
         </classes>
