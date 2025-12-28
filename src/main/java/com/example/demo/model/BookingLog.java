@@ -9,23 +9,24 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class BookingLog {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @ManyToOne
     @JoinColumn(name = "booking_id")
     private Booking booking;
-    
+
     private String logMessage;
     private LocalDateTime loggedAt;
-    
+
     @PrePersist
-    protected void onCreate() {
-        loggedAt = LocalDateTime.now();
+    public void onCreate() {                      // ⬅️ FIX: MAKE PUBLIC
+        this.loggedAt = LocalDateTime.now();
     }
-    
-    // Constructor for test compatibility - REMOVE @AllArgsConstructor
+
+    // Constructor for testing compatibility
     public BookingLog(Long id, Booking booking, String logMessage, LocalDateTime loggedAt) {
         this.id = id;
         this.booking = booking;
