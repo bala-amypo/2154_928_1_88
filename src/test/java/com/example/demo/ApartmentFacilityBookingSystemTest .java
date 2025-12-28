@@ -24,7 +24,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDateTime;
 
-class ApartmentFacilityBookingSystemTest {
+@Test
+public class ApartmentFacilityBookingSystemTest {
 
     @Mock private UserRepository userRepository;
     @Mock private ApartmentUnitRepository apartmentUnitRepository;
@@ -67,48 +68,48 @@ class ApartmentFacilityBookingSystemTest {
     }
 
     // SERVLET TESTS
-    @Test(groups="servlet", priority=1) 
+    @Test(groups="servlet", priority=1)
     public void t1_servletHello() { 
         Assert.assertNotNull(new SimpleHelloServlet()); 
     }
     
-    @Test(groups="servlet", priority=2) 
+    @Test(groups="servlet", priority=2)
     public void t2_servletStatus200() { 
         SimpleHelloServlet servlet = new SimpleHelloServlet();
         Assert.assertNotNull(servlet); 
     }
     
-    @Test(groups="servlet", priority=3) 
+    @Test(groups="servlet", priority=3)
     public void t3_servletContentType() { 
         SimpleHelloServlet servlet = new SimpleHelloServlet();
         Assert.assertNotNull(servlet); 
     }
     
-    @Test(groups="servlet", priority=4) 
+    @Test(groups="servlet", priority=4)
     public void t4_servletInfo() { 
         SimpleHelloServlet s = new SimpleHelloServlet();
         Assert.assertNotNull(s.getServletInfo()); 
     }
     
-    @Test(groups="servlet", priority=5) 
+    @Test(groups="servlet", priority=5)
     public void t5_servletMultipleCalls() { 
         Assert.assertNotNull(new SimpleHelloServlet());
         Assert.assertNotNull(new SimpleHelloServlet());
         Assert.assertNotNull(new SimpleHelloServlet());
     }
     
-    @Test(groups="servlet", priority=6) 
+    @Test(groups="servlet", priority=6)
     public void t6_servletNotNull() { 
         Assert.assertNotNull(new SimpleHelloServlet()); 
     }
     
-    @Test(groups="servlet", priority=7) 
+    @Test(groups="servlet", priority=7)
     public void t7_servletUrlPatternLogical() { 
         SimpleHelloServlet s = new SimpleHelloServlet();
         Assert.assertNotNull(s.getServletInfo());
     }
     
-    @Test(groups="servlet", priority=8) 
+    @Test(groups="servlet", priority=8)
     public void t8_servletNoExceptionOnPost() { 
         SimpleHelloServlet s = new SimpleHelloServlet();
         Assert.assertNotNull(s);
@@ -225,61 +226,61 @@ class ApartmentFacilityBookingSystemTest {
     }
 
     // DI → IoC
-    @Test(groups="di", priority=17) 
+    @Test(groups="di", priority=17)
     public void t17_userServiceNotNull(){ 
         Assert.assertNotNull(userService); 
     }
     
-    @Test(groups="di", priority=18) 
+    @Test(groups="di", priority=18)
     public void t18_apartmentServiceNotNull(){ 
         Assert.assertNotNull(apartmentUnitService); 
     }
     
-    @Test(groups="di", priority=19) 
+    @Test(groups="di", priority=19)
     public void t19_facilityServiceNotNull(){ 
         Assert.assertNotNull(facilityService); 
     }
     
-    @Test(groups="di", priority=20) 
+    @Test(groups="di", priority=20)
     public void t20_bookingServiceNotNull(){ 
         Assert.assertNotNull(bookingService); 
     }
     
-    @Test(groups="di", priority=21) 
+    @Test(groups="di", priority=21)
     public void t21_bookingLogServiceNotNull(){ 
         Assert.assertNotNull(bookingLogService); 
     }
     
-    @Test(groups="di", priority=22) 
+    @Test(groups="di", priority=22)
     public void t22_passwordEncoderMockNotNull(){ 
         Assert.assertNotNull(passwordEncoder); 
     }
     
-    @Test(groups="di", priority=23) 
+    @Test(groups="di", priority=23)
     public void t23_jwtProviderNotNull(){ 
         Assert.assertNotNull(jwtTokenProvider); 
     }
     
-    @Test(groups="di", priority=24) 
+    @Test(groups="di", priority=24)
     public void t24_repositoriesNotNull(){ 
         Assert.assertNotNull(userRepository); 
     }
 
     // Hibernate Tests
-    @Test(groups="hibernate", priority=25) 
+    @Test(groups="hibernate", priority=25)
     public void t25_userDefaultRole(){ 
         User u = new User(); 
         u.setRole("RESIDENT"); 
         Assert.assertEquals(u.getRole(),"RESIDENT"); 
     }
     
-    @Test(groups="hibernate", priority=26) 
+    @Test(groups="hibernate", priority=26)
     public void t26_bookingDefaultStatus() { 
         Booking b = new Booking(); 
         Assert.assertEquals(b.getStatus(),Booking.STATUS_CONFIRMED); 
     }
     
-    @Test(groups="hibernate", priority=27) 
+    @Test(groups="hibernate", priority=27)
     public void t27_bookingLogTimestamp() { 
         BookingLog log = new BookingLog(); 
         log.setLoggedAt(LocalDateTime.now()); 
@@ -368,19 +369,19 @@ class ApartmentFacilityBookingSystemTest {
         Assert.assertEquals(b.getUser().getEmail(),"u@e.com");
     }
 
-    @Test(groups="jpa-mapping", priority=36) 
+    @Test(groups="jpa-mapping", priority=36)
     public void t36_1NF_facilityTimesNonNull() { 
         Facility f = new Facility(1L,"Gym","D","06:00","22:00"); 
         Assert.assertNotNull(f.getOpenTime()); 
     }
     
-    @Test(groups="jpa-mapping", priority=37) 
+    @Test(groups="jpa-mapping", priority=37)
     public void t37_2NF_bookingDependsOnId() { 
         Booking b = new Booking(1L,null,null,LocalDateTime.now(),LocalDateTime.now().plusHours(1),Booking.STATUS_CONFIRMED); 
         Assert.assertNotNull(b.getStartTime()); 
     }
     
-    @Test(groups="jpa-mapping", priority=38) 
+    @Test(groups="jpa-mapping", priority=38)
     public void t38_3NF_bookingLogNoTransitive() { 
         BookingLog log = new BookingLog(); 
         log.setLogMessage("Created"); 
@@ -440,7 +441,7 @@ class ApartmentFacilityBookingSystemTest {
         Assert.assertEquals(Arrays.asList(b1,b2,b3).size(),3);
     }
 
-    @Test(groups="many-to-many", priority=44) 
+    @Test(groups="many-to-many", priority=44)
     public void t44_edgeNoBookings() { 
         Assert.assertTrue(Collections.<Booking>emptyList().isEmpty()); 
     }
@@ -474,7 +475,7 @@ class ApartmentFacilityBookingSystemTest {
         Assert.assertEquals(jwtTokenProvider.getRoleFromToken(token),"RESIDENT");
     }
 
-    @Test(groups="jwt-security", priority=48) 
+    @Test(groups="jwt-security", priority=48)
     public void t48_jwtInvalidTokenFalse() { 
         Assert.assertFalse(jwtTokenProvider.validateToken("x.y.z")); 
     }
@@ -493,8 +494,7 @@ class ApartmentFacilityBookingSystemTest {
 
     @Test(groups="jwt-security", priority=50)
     public void t50_jwtUserIdFallbackSubject() {
-        // This test is a placeholder - it always passes
-        // You can implement actual JWT parsing logic if needed
+        // Placeholder test
         Assert.assertTrue(true);
     }
 
