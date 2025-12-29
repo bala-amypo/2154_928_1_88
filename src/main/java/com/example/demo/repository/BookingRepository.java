@@ -1,15 +1,21 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.Booking;
-import com.example.demo.model.Facility;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Repository
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import com.example.demo.model.Booking;
+import com.example.demo.model.Facility;
+
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-    // Find bookings that overlap with given start and end time for conflict check
-    List<Booking> findByFacilityAndStartTimeLessThanAndEndTimeGreaterThan(
-            Facility facility, LocalDateTime start, LocalDateTime end);
+
+    @Query("SELECT b FROM Booking b WHERE b.facility = :facility AND b.startTime < :end AND b.endTime > :start")
+    List<Booking> findConflictingBookings(
+            @Param("facility") Facility facility,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end
+    );
 }
