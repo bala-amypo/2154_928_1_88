@@ -6,12 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email")
-})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "users")
 public class User {
 
     @Id
@@ -20,17 +18,10 @@ public class User {
 
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String email;
 
     private String password;
 
-    private String role; 
-
-    @PrePersist
-    public void setDefaultRole() {
-        if (this.role == null || this.role.isEmpty()) {
-            this.role = "RESIDENT";
-        }
-    }
+    private String role;
 }

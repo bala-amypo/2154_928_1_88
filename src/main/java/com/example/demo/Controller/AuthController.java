@@ -1,45 +1,48 @@
 package com.example.demo.controller;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.model.User;
-import com.example.demo.service.UserService;
+import com.example.demo.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@Validated
 public class AuthController {
 
-    private final UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
-    public AuthController(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    
+    // REGISTER
     @PostMapping("/register")
-    public ResponseEntity<User> register(@Valid @RequestBody User user) {
-        return ResponseEntity.ok(userService.register(user));
+    public ResponseEntity<?> register(@RequestBody User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            return ResponseEntity.badRequest().body("Email already exists");
+        }
+
+        // encode password before saving
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return ResponseEntity.ok("User registered successfully");
     }
 
-    
-    @GetMapping("/login")
-    public ResponseEntity<User> login(
-            @RequestParam
-            @Email(message = "Invalid email format")
-            @NotBlank(message = "Email is required")
-            String email,
+    // LOGIN (simple version, for JWT you need token generation)
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User loginRequest) {
+        User user = userRepository.findByEmail(loginRequest.getEmail());
+        if (user == null) {
+            return ResponseEntity.status(401).body("Invalid email");
+        }
 
-            @RequestParam
-            @NotBlank(message = "Password is required")
-            String password) {
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(401).body("Invalid password");
+        }
 
-        return ResponseEntity.ok(userService.login(email, password));
+        // In real app, generate JWT token here
+        return ResponseEntity.ok("Login successful");
     }
 }

@@ -1,20 +1,32 @@
+package com.example.demo.security;
+
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+@Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable() // disable CSRF for simplicity; you can configure it properly later
+            .csrf().disable() // Disable CSRF for Postman/testing
             .authorizeHttpRequests()
-                .requestMatchers("/auth/register", "/auth/login").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/auth/register", "/auth/login").permitAll() // allow unauthenticated
+                .anyRequest().authenticated() // secure all other endpoints
             .and()
-            .httpBasic(); // or JWT filter if you use JWT
+            .httpBasic(); // or JWT filter if you implement JWT
+
         return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
