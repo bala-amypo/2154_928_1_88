@@ -1,20 +1,36 @@
 package com.example.demo.model;
 
-import lombok.*;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Entity
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
     private String password;
-    private String role = "RESIDENT";
+
+    private String role; 
+
+    @PrePersist
+    public void setDefaultRole() {
+        if (this.role == null || this.role.isEmpty()) {
+            this.role = "RESIDENT";
+        }
+    }
 }
