@@ -10,17 +10,15 @@ import io.swagger.v3.oas.models.info.Info;
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI bookingOpenAPI() {
+    public OpenAPI bookingAPI() {
         return new OpenAPI()
-            .info(new Info()
-                .title("Apartment Facility Booking API")
-                .description("API Documentation for Apartment Facility Booking System")
-                .version("1.0.0")
-                .contact(new Contact()
-                        .name("Your Name")
-                        .email("your-email@example.com")
-                        .url("https://example.com")
-                )
-            );
+                .info(new Info()
+                        .title("Apartment Facility Booking API")
+                        .description("API Docs for Facility Booking System")
+                        .version("1.0.0")
+                        .contact(new Contact()
+                                .name("Your Name")
+                                .email("your-email@example.com")
+                                .url("https://example.com")));
     }
 }
