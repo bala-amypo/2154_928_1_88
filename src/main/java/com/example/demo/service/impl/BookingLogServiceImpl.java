@@ -5,41 +5,32 @@ import com.example.demo.model.BookingLog;
 import com.example.demo.repository.BookingLogRepository;
 import com.example.demo.repository.BookingRepository;
 import com.example.demo.service.BookingLogService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class BookingLogServiceImpl implements BookingLogService {
-    
+
     private final BookingLogRepository bookingLogRepository;
     private final BookingRepository bookingRepository;
-    
-    @Override
-    public BookingLog addLog(Long bookingId, String message) {
-        try {
-            Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new RuntimeException("Booking not found"));
-            
-            BookingLog log = new BookingLog();
-            log.setBooking(booking);
-            log.setLogMessage(message);
-            
-            return bookingLogRepository.save(log);
-        } catch (Exception e) {
-            // Create a log anyway even if booking not found (for test purposes)
-            BookingLog log = new BookingLog();
-            log.setLogMessage(message);
-            return bookingLogRepository.save(log);
-        }
+
+    public BookingLogServiceImpl(BookingLogRepository bookingLogRepository, BookingRepository bookingRepository){
+        this.bookingLogRepository = bookingLogRepository;
+        this.bookingRepository = bookingRepository;
     }
-    
+
     @Override
-    public List<BookingLog> getLogsByBooking(Long bookingId) {
-        Booking booking = bookingRepository.findById(bookingId)
-            .orElseThrow(() -> new RuntimeException("Booking not found"));
-        
+    public BookingLog addLog(Long bookingId, String message){
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new RuntimeException("Booking not found"));
+        BookingLog log = new BookingLog();
+        log.setBooking(booking);
+        log.setLogMessage(message);
+        return bookingLogRepository.save(log);
+    }
+
+    @Override
+    public List<BookingLog> getLogsByBooking(Long bookingId){
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new RuntimeException("Booking not found"));
         return bookingLogRepository.findByBookingOrderByLoggedAtAsc(booking);
     }
 }

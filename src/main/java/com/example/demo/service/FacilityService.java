@@ -1,26 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Facility;
-import com.example.demo.repository.FacilityRepository;
-import org.springframework.stereotype.Service;
 import java.util.List;
 
-@Service
-public class FacilityService {
-
-    private final FacilityRepository facilityRepository;
-
-    public FacilityService(FacilityRepository facilityRepository){
-        this.facilityRepository = facilityRepository;
-    }
-
-    // Add a new facility
-    public Facility addFacility(Facility facility){
-        return facilityRepository.save(facility);
-    }
-
-    // Get all facilities
-    public List<Facility> getAllFacilities(){
-        return facilityRepository.findAll();
-    }
+public interface FacilityService {
+    Facility addFacility(Facility facility);
+    List<Facility> getAllFacilities();
 }
