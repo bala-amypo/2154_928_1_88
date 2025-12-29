@@ -19,6 +19,6 @@ public class SwaggerConfig {
                         .contact(new Contact()
                                 .name("Your Name")
                                 .email("your-email@example.com")
-                                .url("https://example.com")));
+                                .url("https://9287.408procr.amypo.ai/")));
     }
 }
