@@ -5,8 +5,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest {
-    private String name;
+public class LoginRequest {
     private String email;
     private String password;
 }

@@ -1,28 +1,20 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.*;
 
-@Entity
-@Table(name = "facilities")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "facilities", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class Facility {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String name;
     private String description;
     private String openTime;
     private String closeTime;
-    
-    // Constructor for test compatibility - REMOVE @AllArgsConstructor
-    public Facility(Long id, String name, String description, String openTime, String closeTime) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.openTime = openTime;
-        this.closeTime = closeTime;
-    }
 }
