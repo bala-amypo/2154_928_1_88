@@ -1,32 +1,45 @@
-package com.example.demo.security;
+package com.example.demo.controller;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
-@Configuration
-@EnableWebSecurity
-public class SecurityConfig {
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf().disable() // Disable CSRF for Postman/testing
-            .authorizeHttpRequests()
-                .requestMatchers("/auth/register", "/auth/login").permitAll() // allow unauthenticated
-                .anyRequest().authenticated() // secure all other endpoints
-            .and()
-            .httpBasic(); // or JWT filter if you implement JWT
+import com.example.demo.model.User;
+import com.example.demo.service.UserService;
 
-        return http.build();
+@RestController
+@RequestMapping("/auth")
+@Validated
+public class AuthController {
+
+    private final UserService userService;
+
+    public AuthController(UserService userService) {
+        this.userService = userService;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@Valid @RequestBody User user) {
+        return ResponseEntity.ok(userService.register(user));
+    }
+
+    
+    @GetMapping("/login")
+    public ResponseEntity<User> login(
+            @RequestParam
+            @Email(message = "Invalid email format")
+            @NotBlank(message = "Email is required")
+            String email,
+
+            @RequestParam
+            @NotBlank(message = "Password is required")
+            String password) {
+
+        return ResponseEntity.ok(userService.login(email, password));
     }
 }
