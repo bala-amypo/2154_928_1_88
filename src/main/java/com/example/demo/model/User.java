@@ -1,31 +1,31 @@
-package com.example.demo.model;
-
+import lombok.Data;
 import jakarta.persistence.*;
-import lombok.*;
+import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "users")
 @Data
-@NoArgsConstructor
+@Entity
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
-    
     private String name;
     private String email;
     private String password;
-    private String role = "RESIDENT";
-    
-    @OneToOne(mappedBy = "owner", cascade = CascadeType.ALL)
+    private String role;
+
+    @OneToOne(mappedBy = "owner")
     private ApartmentUnit apartmentUnit;
-    
-    // Constructor for test compatibility - REMOVE @AllArgsConstructor
-    public User(Long id, String name, String email, String password, String role) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
 }
+
+@Data
+@Entity
+public class ApartmentUnit {
+    @Id @GeneratedValue
+    private Long id;
+    private String unitNumber;
+    private Integer floor;
+
+    @OneToOne
+    private User owner;
+}
+
+// Booking, Facility, BookingLog same pattern
