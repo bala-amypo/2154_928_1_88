@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,23 +21,17 @@ public class AuthController {
         this.userService = userService;
     }
 
-    
+    // REGISTER USER
     @PostMapping("/register")
     public ResponseEntity<User> register(@Valid @RequestBody User user) {
         return ResponseEntity.ok(userService.register(user));
     }
 
-    
+    // LOGIN USER
     @GetMapping("/login")
     public ResponseEntity<User> login(
-            @RequestParam
-            @Email(message = "Invalid email format")
-            @NotBlank(message = "Email is required")
-            String email,
-
-            @RequestParam
-            @NotBlank(message = "Password is required")
-            String password) {
+            @RequestParam @Email(message = "Invalid email format") String email,
+            @RequestParam @NotBlank(message = "Password is required") String password) {
 
         return ResponseEntity.ok(userService.login(email, password));
     }
