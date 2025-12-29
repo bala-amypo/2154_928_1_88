@@ -1,16 +1,12 @@
-spring.application.name=sql
+package com.example.demo;
 
-//Server port
-server.port=9001
-server.forward-headers-strategy=framework
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-// MySQL datasource
-spring.datasource.url=jdbc:mysql://localhost:3306/apartmentdb?createDatabaseIfNotExist=true
-spring.datasource.username=root
-spring.datasource.password=Amypo
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-// JPA / Hibernate settings
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+@SpringBootApplication
+public class DemoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}
