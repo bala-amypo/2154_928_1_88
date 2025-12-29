@@ -1,16 +1,15 @@
 spring.application.name=sql
 
-# Server port
+//Server port
 server.port=9001
 server.forward-headers-strategy=framework
 
-# MySQL datasource
-spring.datasource.url=jdbc:mysql://localhost:3306/app_fac?createDatabaseIfNotExist=true
+// MySQL datasource
+spring.datasource.url=jdbc:mysql://localhost:3306/apartmentdb?createDatabaseIfNotExist=true
 spring.datasource.username=root
 spring.datasource.password=Amypo
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-
-# JPA / Hibernate settings
+// JPA / Hibernate settings
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
