@@ -1,48 +1,32 @@
-package com.example.demo.controller;
+package com.example.demo.security;
 
-import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.web.SecurityFilterChain;
 
-@RestController
-@RequestMapping("/auth")
-public class AuthController {
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
 
-    @Autowired
-    private UserRepository userRepository;
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf().disable() // Disable CSRF for Postman/testing
+            .authorizeHttpRequests()
+                .requestMatchers("/auth/register", "/auth/login").permitAll() // allow unauthenticated
+                .anyRequest().authenticated() // secure all other endpoints
+            .and()
+            .httpBasic(); // or JWT filter if you implement JWT
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    // REGISTER
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            return ResponseEntity.badRequest().body("Email already exists");
-        }
-
-        // encode password before saving
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return ResponseEntity.ok("User registered successfully");
+        return http.build();
     }
 
-    // LOGIN (simple version, for JWT you need token generation)
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User loginRequest) {
-        User user = userRepository.findByEmail(loginRequest.getEmail());
-        if (user == null) {
-            return ResponseEntity.status(401).body("Invalid email");
-        }
-
-        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(401).body("Invalid password");
-        }
-
-        // In real app, generate JWT token here
-        return ResponseEntity.ok("Login successful");
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
